@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
-const distFolder = '.dist';
+const distFolder = 'dist';
 const src = 'src';
 
 // development webpack configuration.
@@ -65,7 +65,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, distFolder),
-    publicPath: '/',
+    publicPath: '',
     filename: '[name]-[hash].js',
     chunkFilename: '[id]-[chunkhash].js'
   },
