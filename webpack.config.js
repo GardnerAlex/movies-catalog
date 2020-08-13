@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
-const distFolder = 'dist';
+const distFolder = 'public_html';
 const src = 'src';
 
 // development webpack configuration.

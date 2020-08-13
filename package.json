@@ -51,6 +51,5 @@
     "lint:scss": "npx stylelint './src/styles/*.scss' './src/components/**/*.scss' --fix",
     "test": "react-scripts test"
   },
-  "author": "nrei",
-  "private": true
+  "author": "AlexGArdner"
 }
