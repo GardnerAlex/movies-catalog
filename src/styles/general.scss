@@ -1,0 +1,16 @@
+/** use once only for root js entry. */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+
+html, body {
+  margin: 0;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  // font-size: calc(8px + .3349vmin + .3349vmax);
+}
+
+// remove chrome outline on element focus.
+button:focus,
+input:focus {
+  outline: none;
+}
