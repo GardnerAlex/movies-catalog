@@ -13,13 +13,15 @@ const src = 'src';
 
 // development webpack configuration.
 module.exports = {
-  entry: { main: './src/index.jsx' },
+  entry: { main: './src/index.tsx' },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.scss$/i,
@@ -28,16 +30,6 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: devMode
-            }
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-              modules: {
-                localIdentName: '[local]__[hash:base64:8]'
-              }
             }
           },
           {
@@ -52,19 +44,25 @@ module.exports = {
           },
           { loader: 'sass-loader', options: { sourceMap: true } }
         ]
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+        exclude: /node_modules/,
+        use: ['file-loader?name=[name].[ext]'] // ?name=[name].[ext] is only necessary to preserve the original file name
       }
     ]
   },
   resolve: {
-    alias: {
-      '@nrei/components': path.resolve(__dirname, src, 'components/'),
-      '@nrei/styles': path.resolve(__dirname, src, 'styles/')
-    },
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     modules: ['node_modules']
   },
   output: {
     path: path.resolve(__dirname, distFolder),
+    sourceMapFilename: 'bundle.js.map',
     publicPath: '',
     filename: '[name]-[hash].js',
     chunkFilename: '[id]-[chunkhash].js'
@@ -73,7 +71,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Leo Vegas Test App',
-      template: './src/index.html'
+      template: './public/index.html',
+      favicon: './public/favicon.ico'
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? '[name].css' : '[name].[hash].css',
@@ -83,9 +82,10 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, distFolder),
     compress: true,
-    host: '0.0.0.0',
+    host: 'leo-vegas-test.com',
     port: 9090,
-    writeToDisk: true
+    writeToDisk: true,
+    disableHostCheck: true // That solved it
   },
   mode: devMode ? 'development' : 'production',
   devtool: devMode ? 'source-map' : false
