@@ -13,7 +13,7 @@ const src = 'src';
 
 // development webpack configuration.
 module.exports = {
-  entry: { main: './src/index.tsx' },
+  entry: { main: './src/index.jsx' },
   module: {
     rules: [
       {
