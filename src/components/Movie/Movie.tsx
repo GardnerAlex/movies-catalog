@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
+import { Rating } from '@material-ui/lab';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -12,20 +12,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { ImoviesData } from '../../interfaces/interfaces';
+import { apiSettings, genresObj } from '../../api/apiDefaults';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxWidth: 345,
+      maxWidth: 250,
     },
     media: {
       height: 0,
-      paddingTop: '56.25%', // 16:9
+      paddingTop: '150%', // 16:9
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -43,26 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const Movie = ({ movie }) => {
-  return (
-    <figure className="card">
-      <img
-        src={movie.Poster}
-        alt={`The movie titled: ${movie.Title}`}
-      />
-      <figcaption>{movie.Title}</figcaption>
-    </figure>
-  );
-};
-
-export const RecipeReviewCard = ({ inputData }) => {
+export const Movie = (props) => {
+  const movie: ImoviesData = props.movie;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [favorites, setFavorites] = useState('primary');
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   const handleFavoritesClick = () => {
     if (favorites === 'primary') {
@@ -80,22 +64,17 @@ export const RecipeReviewCard = ({ inputData }) => {
             R
           </Avatar>
         )}
-        action={(
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        )}
-        title={inputData.Title}
-        subheader={`${inputData.Type} ${inputData.Year}`}
+        title={movie.title}
+        subheader={`${genresObj[movie.genre_ids[0]]} ${movie.release_date}`}
       />
       <CardMedia
         className={classes.media}
-        image={inputData.Poster}
-        title={inputData.Title}
+        image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
+        title={movie.title}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {inputData.Title}
+        <Typography noWrap variant="body2" color="textSecondary" component="p">
+          {movie.overview}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -104,32 +83,22 @@ export const RecipeReviewCard = ({ inputData }) => {
           onClick={handleFavoritesClick}
           color={favorites}
         >
-          <FavoriteIcon
-          />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+          <FavoriteIcon />
         </IconButton>
         <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
+          aria-label="user rating"
         >
-          <ExpandMoreIcon />
+          <Rating name="half-rating-read" defaultValue={2.2} precision={0.1} readOnly value={movie.vote_average / 2} />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Details:</Typography>
           <Typography paragraph>
-            Can be description:
-            {inputData.Title}
+            {movie.overview}
           </Typography>
         </CardContent>
       </Collapse>
     </Card>
   );
-}
+};
