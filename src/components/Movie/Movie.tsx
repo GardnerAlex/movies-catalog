@@ -7,12 +7,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { ImoviesData } from '../../interfaces/interfaces';
 import { apiSettings, genresObj } from '../../api/apiDefaults';
@@ -20,7 +18,7 @@ import { apiSettings, genresObj } from '../../api/apiDefaults';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxWidth: 250,
+      width: 250,
     },
     media: {
       height: 0,
@@ -38,6 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       backgroundColor: red[500],
+    },
+    actions: {
+      height: '30px',
+      marginTop: '0px', // 16:9
+      backgroundColor: 'white',
+      opacity: '80%',
     },
   }),
 );
@@ -58,26 +62,26 @@ export const Movie = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardHeader
-        avatar={(
-          <Avatar aria-label="movie" className={classes.avatar}>
-            R
-          </Avatar>
-        )}
-        title={movie.title}
-        subheader={`${genresObj[movie.genre_ids[0]]} ${movie.release_date}`}
-      />
       <CardMedia
         className={classes.media}
         image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
         title={movie.title}
       />
-      <CardContent>
-        <Typography noWrap variant="body2" color="textSecondary" component="p">
-          {movie.overview}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
+      {/*<CardContent>*/}
+      {/*  <Typography noWrap variant="body2" color="textSecondary" component="p">*/}
+      {/*    {movie.overview}*/}
+      {/*  </Typography>*/}
+      {/*</CardContent>*/}
+      <CardHeader
+        // avatar={(
+        //   <Avatar aria-label="movie" className={classes.avatar}>
+        //     R
+        //   </Avatar>
+        // )}
+                  title={movie.title}
+                  subheader={`${genresObj[movie.genre_ids[0]]} ${movie.release_date}`}
+      />
+      <CardActions disableSpacing className={classes.actions}>
         <IconButton
           aria-label="add to favorites"
           onClick={handleFavoritesClick}
