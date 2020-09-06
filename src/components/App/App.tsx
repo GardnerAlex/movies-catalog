@@ -95,7 +95,7 @@ export const App = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Footer title="Movies Catalog App" description="Footer content" />
+        <Footer title="Movies Catalog App" description="Footer" />
       </Container>
     </>
   );
