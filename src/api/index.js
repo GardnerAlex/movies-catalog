@@ -1,0 +1,1 @@
+export { apiSettings } from './apiDefaults';
