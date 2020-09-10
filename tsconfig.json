@@ -11,9 +11,11 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/*.ts",
+    "src/**/*",
     "src/*.tsx",
+    "src/*.jsx",
     "src/components/*.tsx",
+    "src/services/*.ts",
     "src/api/*.ts"
   ],
   "baseUrl": "."

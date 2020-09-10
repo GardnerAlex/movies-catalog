@@ -21,6 +21,7 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "@types/react-router-dom": "^5.1.5",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "clsx": "^1.1.1",
@@ -30,6 +31,10 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.1.21",
+    "react-router-dom": "^5.2.0",
+    "react-router-last-location": "^2.0.1",
+    "react-socks": "^2.1.0",
+    "regenerator-runtime": "^0.13.7",
     "sass": "^1.26.10"
   },
   "devDependencies": {
@@ -79,7 +84,7 @@
   },
   "scripts": {
     "compile": "tsc -w --jsx react",
-    "start": "npx webpack-dev-server",
+    "start": "npx webpack-dev-server --mode development --content-base=build --history-api-fallback",
     "build": "NODE_ENV=production webpack -p",
     "lint": "yarn lint:js && yarn lint:scss",
     "lint:js": "npx eslint --ext js,jsx ./src --fix",
