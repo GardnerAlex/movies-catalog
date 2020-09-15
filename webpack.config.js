@@ -83,7 +83,7 @@ module.exports = {
     contentBase: path.resolve(__dirname, distFolder),
     compress: true,
     host: 'leo-vegas-test.com',
-    port: 9090,
+    port: 9091,
     writeToDisk: true,
     disableHostCheck: true // That solved it
   },

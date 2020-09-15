@@ -21,3 +21,10 @@ export interface IMovieApiResponse {
     total_pages: number;
     results: Array<ImoviesData>
 }
+
+export interface IlocalApiRequest {
+    queryType: string;
+    pageId?: number;
+    movieId?: number | string;
+    genreName?: string;
+}
