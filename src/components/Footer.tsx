@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     // backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(8),
-    padding: theme.spacing(6, 0)
-  }
+    padding: theme.spacing(6, 0),
+  },
 }));
 
 export function Footer(props) {

@@ -18,8 +18,8 @@ const useStyles = styles_1.makeStyles((theme) => ({
     footer: {
         borderTop: `1px solid ${theme.palette.divider}`,
         marginTop: theme.spacing(8),
-        padding: theme.spacing(6, 0)
-    }
+        padding: theme.spacing(6, 0),
+    },
 }));
 function Footer(props) {
     const classes = useStyles();

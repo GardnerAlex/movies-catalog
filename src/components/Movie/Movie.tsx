@@ -1,92 +1,96 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Rating } from '@material-ui/lab';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import { red } from '@material-ui/core/colors';
+import {IconButton, IconButtonProps, Tooltip} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import { ImoviesData } from '../../interfaces/interfaces';
 import { apiSettings, genresObj } from '../../api/apiDefaults';
+import { ImoviesData } from '../../interfaces/interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: 250
+      width: 250,
+      height: '100%',
+      paddingTop: 0,
+      backgroundColor: '#fff'
     },
     media: {
       height: 0,
       paddingTop: '150%' // 16:9
     },
-    expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      })
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)'
-    },
-    avatar: {
-      backgroundColor: red[500]
-    },
     actions: {
-      height: '30px',
-      marginTop: '0px', // 16:9
-      backgroundColor: 'white',
-      opacity: '80%'
+      height: theme.spacing(1),
+      padding: '10px 10px 8px 15px',
+      marginTop: '10px',
+      justifyContent: 'space-between'
+    },
+    textBox: {
+      margin: '5px 15px'
+    },
+    rating: {
+      // padding: '12px 15px'
     }
   })
 );
 
-export const Movie = (props) => {
-  // @ts-ignore
-  const { movie }: ImoviesData = props;
+export const Movie = (props: {movie: ImoviesData}) => {
+  // const history = useHistory();
+  const { movie } = props;
   const classes = useStyles();
-  const [favorites, setFavorites] = useState('primary');
+  const [favorites, setFavorites] = useState<IconButtonProps>({ color: 'primary' });
 
   const handleFavoritesClick = () => {
-    if (favorites === 'primary') {
-      setFavorites('secondary');
+    if (favorites.color === 'primary') {
+      setFavorites({ color: 'secondary' });
     } else {
-      setFavorites('primary');
+      setFavorites({ color: 'primary' });
     }
   };
 
   return (
     <Card className={classes.root}>
-      <CardMedia
-        className={classes.media}
-        image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
-        title={movie.title}
-      />
-      <CardHeader
-        // avatar={(
-        //   <Avatar aria-label="movie" className={classes.avatar}>
-        //     R
-        //   </Avatar>
-        // )}
-        title={movie.title}
-        subheader={`${genresObj[movie.genre_ids[0]]} ${movie.release_date}`}
-      />
-      <CardActions disableSpacing className={classes.actions}>
-        <IconButton
-          aria-label="add to favorites"
-          onClick={handleFavoritesClick}
-          color={favorites}
-        >
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton
-          aria-label="user rating"
-        >
-          <Rating name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
-        </IconButton>
+      <Link to={`/moviedetails/${movie.id}_${movie.title}`} key={movie.id}>
+        <CardMedia
+          className={classes.media}
+          image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
+          title={movie.title}
+          // onClick={() => {
+          //   console.log('Clicked on movie: ', `/movie/details/${movie.id}/${movie.title}`);
+          //   // history.push(`/movie/${movie.id}/${movie.title}`);
+          // }}
+        />
+      </Link>
+      <CardActions className={classes.actions}>
+        <Tooltip title="User rating">
+          <div aria-label="user rating" className={classes.rating}>
+            <Rating size="small" name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
+          </div>
+        </Tooltip>
+        <Tooltip title="Add to Favorites">
+          <IconButton
+            size="small"
+            aria-label="add to favorites"
+            onClick={handleFavoritesClick}
+            color={favorites.color}
+          >
+            <FavoriteIcon />
+          </IconButton>
+        </Tooltip>
       </CardActions>
+      <div className={classes.textBox}>
+        <Typography variant="body1" component="h3">
+          {movie.title}
+        </Typography>
+        <Typography variant="caption">
+          {`Genre: ${genresObj[movie.genre_ids[0]]} | ${movie.release_date.slice(0, 4)}`}
+        </Typography>
+      </div>
     </Card>
   );
 };

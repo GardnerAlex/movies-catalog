@@ -1,4 +1,4 @@
-const genresFromApi = [
+export const genresFromApi = [
   {
     id: 28,
     name: 'Action'
@@ -177,9 +177,9 @@ export const apiSettings = {
 };
 
 export const genresObj = (() => {
-  const genresO = {};
+  const genresO: {[key: string]: string} = {};
   // @ts-ignore
   // eslint-disable-next-line no-return-assign
-  genresFromApi.map((g) => genresO[g.id] = g.name);
+  genresFromApi.forEach((g) => genresO[g.id] = g.name);
   return genresO;
 })();
