@@ -7,6 +7,8 @@ const core_1 = require("@material-ui/core");
 const Grid_1 = require("@material-ui/core/Grid");
 const styles_1 = require("@material-ui/core/styles");
 const Typography_1 = require("@material-ui/core/Typography");
+const lab_1 = require("@material-ui/lab");
+const react_router_dom_1 = require("react-router-dom");
 const api_1 = require("../../api/api");
 const Movie_1 = require("../Movie/Movie");
 const queryString = require('query-string');
@@ -25,27 +27,7 @@ const useStyles = styles_1.makeStyles((theme) => styles_1.createStyles({
     }
 }));
 exports.MoviesList = (match) => {
-    const numCheck = new RegExp('^[0-9]+$');
-    const classes = useStyles();
-    const myName = 'MoviesList';
-    let pageNum = null;
-    const pageNumParsed = queryString.parse(match.location.search).page;
-    let pageTitle = 'Main page';
-    const location = match.location.pathname.split('/')[1];
-    let queryType = location;
-    const genreName = match.match.params.genreTitle;
-    if (location === '') {
-        queryType = 'popular';
-    }
-    if (location !== undefined) {
-        pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
-        if (location === 'genres') {
-            pageTitle = `${match.match.params.genreTitle.charAt(0).toUpperCase()}${match.match.params.genreTitle.slice(1)} Movies`;
-        }
-    }
-    if (numCheck.test(pageNumParsed) === true) {
-        pageNum = pageNumParsed;
-    }
+    const history = react_router_dom_1.useHistory();
     const [moviesData, setMoviesData] = react_1.useState({
         page: 0,
         results: [],
@@ -54,6 +36,31 @@ exports.MoviesList = (match) => {
     });
     const [loading, setLoading] = react_1.useState(false);
     const [errorMessage, setErrorMessage] = react_1.useState(null);
+    const [pageNumPagination, setPageNumPagination] = react_1.useState(1);
+    const location = match.location.pathname.split('/')[1];
+    const numCheck = new RegExp('^[0-9]+$');
+    console.log('match', match);
+    console.log('location', location);
+    const classes = useStyles();
+    const myName = 'MoviesList';
+    let pageTitle = 'Main page';
+    if (location !== undefined) {
+        pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
+        if (location === 'genres') {
+            pageTitle = `${match.match.params.genreTitle.charAt(0).toUpperCase()}${match.match.params.genreTitle.slice(1)} Movies`;
+        }
+    }
+    let pageNum;
+    const pageNumParsed = queryString.parse(match.location.search).page;
+    if (numCheck.test(pageNumParsed) === true) {
+        pageNum = Number.parseInt(pageNumParsed, 10);
+        if (pageNum !== pageNumPagination) {
+            setPageNumPagination(pageNum);
+        }
+        else if (pageNum === undefined) {
+            setPageNumPagination(1);
+        }
+    }
     react_1.useEffect(() => {
         console.log(`UseEffect fired on page ${myName} `);
         setLoading(true);
@@ -63,7 +70,7 @@ exports.MoviesList = (match) => {
             total_pages: 0,
             total_results: 0
         });
-        api_1.fetchMoviesDetails({ queryType, pageId: pageNum, genreName })
+        api_1.fetchMoviesDetails(Object.assign({ queryType: location, pageId: pageNum }, match.match.params))
             .then(res => {
             console.log(`${location} Axios resp`, res);
             setMoviesData(res.data);
@@ -73,7 +80,18 @@ exports.MoviesList = (match) => {
             setErrorMessage(err.toString());
             setLoading(false);
         });
-    }, [match.location.pathname]);
+    }, [history.location]);
+    const handlePageChange = (event, value) => {
+        const query = queryString.parse(match.location.search);
+        query.page = value;
+        history.push(`${match.location.pathname}?${queryString.stringify(query)}`);
+    };
+    const pagination = () => {
+        if (moviesData.total_pages !== undefined && moviesData.total_pages > 0) {
+            return React.createElement(lab_1.Pagination, { count: moviesData.total_pages, page: pageNumPagination, color: "primary", onChange: handlePageChange });
+        }
+        return null;
+    };
     return (React.createElement(React.Fragment, null,
         React.createElement(core_1.Container, null,
             React.createElement(Typography_1.default, { variant: "h4", component: "h1" }, pageTitle)),
@@ -84,6 +102,8 @@ exports.MoviesList = (match) => {
                 && React.createElement("span", null, errorMessage),
             moviesData
                 && moviesData.results.map((movie) => (React.createElement(Grid_1.default, { className: classes.paper, key: `${movie.poster_path}`, item: true },
-                    React.createElement(Movie_1.Movie, { movie: movie })))))));
+                    React.createElement(Movie_1.Movie, { movie: movie })))),
+            moviesData && !loading
+                && pagination())));
 };
 //# sourceMappingURL=MoviesList.js.map

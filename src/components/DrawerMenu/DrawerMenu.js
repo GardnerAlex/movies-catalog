@@ -8,7 +8,6 @@ const List_1 = require("@material-ui/core/List");
 const ListItem_1 = require("@material-ui/core/ListItem");
 const ListItemIcon_1 = require("@material-ui/core/ListItemIcon");
 const ListItemText_1 = require("@material-ui/core/ListItemText");
-const Mail_1 = require("@material-ui/icons/Mail");
 const styles_1 = require("@material-ui/core/styles");
 const Routes_1 = require("../../Routes/Routes");
 const useStyles = styles_1.makeStyles((theme) => ({
@@ -23,7 +22,7 @@ exports.DrawerMenu = (props) => {
             menuList.push(react_1.default.createElement(react_router_dom_1.NavLink, { to: item.urlPath, style: { textDecoration: 'none' }, key: item.sidebarName },
                 react_1.default.createElement(ListItem_1.default, { button: true, key: item.sidebarName, onClick: props.closeHandler },
                     react_1.default.createElement(ListItemIcon_1.default, null,
-                        react_1.default.createElement(Mail_1.default, { fontSize: "small" })),
+                        react_1.default.createElement(item.icon, { fontSize: "small" })),
                     react_1.default.createElement(ListItemText_1.default, { primary: item.sidebarName }))));
         }
     });

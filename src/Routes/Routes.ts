@@ -1,19 +1,42 @@
+import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
+import FiberNewSharpIcon from '@material-ui/icons/FiberNewSharp';
+import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
+import TheatersSharpIcon from '@material-ui/icons/TheatersSharp';
 import { MoviesList } from '../components/MoviesList/MoviesList';
 import { MovieDetails } from '../components/MovieDetails/MovieDetails';
+import { HomePage } from '../components/HomePage/HomePage';
 
 export const Routes = [
   {
     path: '/',
     urlPath: '/',
     toMenu: true,
+    icon: HomeTwoToneIcon,
     sidebarName: 'Home',
-    component: MoviesList
+    component: HomePage
   },
   {
     path: '/trending',
     urlPath: '/trending',
     toMenu: true,
+    icon: TrendingUpSharpIcon,
     sidebarName: 'Trending',
+    component: MoviesList
+  },
+  {
+    path: '/nowPlaying',
+    urlPath: '/nowplaying',
+    toMenu: true,
+    icon: FiberNewSharpIcon,
+    sidebarName: 'Now playing',
+    component: MoviesList
+  },
+  {
+    path: '/popular',
+    urlPath: '/popular',
+    toMenu: true,
+    icon: TheatersSharpIcon,
+    sidebarName: 'Popular',
     component: MoviesList
   },
   {

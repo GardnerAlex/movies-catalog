@@ -26,7 +26,7 @@ export const DrawerMenu = (props: { closeHandler: (event: React.MouseEvent<HTMLD
       menuList.push(
         <NavLink to={item.urlPath} style={{ textDecoration: 'none' }} key={item.sidebarName}>
           <ListItem button key={item.sidebarName} onClick={props.closeHandler}>
-            <ListItemIcon><MailIcon fontSize="small" /></ListItemIcon>
+            <ListItemIcon><item.icon fontSize="small" /></ListItemIcon>
             <ListItemText primary={item.sidebarName} />
           </ListItem>
         </NavLink>

@@ -15,6 +15,7 @@ import { Routes } from '../../Routes/Routes';
 import { Footer } from '../Footer';
 import { MenuTop } from '../MenuTop/MenuTop';
 import { DrawerMenu } from '../DrawerMenu/DrawerMenu';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const drawerWidth = 175;
 
@@ -64,11 +65,18 @@ export const App = (props: { window: any; }) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    if (matches) {
+      setMobileOpen(!mobileOpen);
+    };
   };
+
+  // const handleDesctopDrawerToggle = () => {
+  //   setMobileOpen(!mobileOpen);
+  // };
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -123,7 +131,7 @@ export const App = (props: { window: any; }) => {
             variant="permanent"
             open
           >
-            <DrawerMenu />
+            <DrawerMenu closeHandler={handleDrawerToggle} />
           </Drawer>
         </Hidden>
       </nav>

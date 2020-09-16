@@ -16,7 +16,7 @@ export const BASE_URL_PATH = 'https://api.themoviedb.org/3/';
 export const BASE_POSTER_PATH = 'https://image.tmdb.org/t/p';
 export const BASE_BACKDROP_PATH = 'https://image.tmdb.org/t/p/original';
 
-const queryUrl = (params: {queryType: string; movieId?: number; pageId?: number; genreName?: string;}) => {
+const queryUrl = (params: IlocalApiRequest) => {
   const getGenreId = (genreTitle: string) => {
     const result = genresFromApi.filter((item => item.name.toLowerCase() === genreTitle.toLowerCase()));
     console.log('result', result);

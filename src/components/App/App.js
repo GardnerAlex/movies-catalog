@@ -18,6 +18,7 @@ const Routes_1 = require("../../Routes/Routes");
 const Footer_1 = require("../Footer");
 const MenuTop_1 = require("../MenuTop/MenuTop");
 const DrawerMenu_1 = require("../DrawerMenu/DrawerMenu");
+const useMediaQuery_1 = require("@material-ui/core/useMediaQuery");
 const drawerWidth = 175;
 const useStyles = styles_1.makeStyles((theme) => ({
     root: {
@@ -63,9 +64,13 @@ exports.App = (props) => {
     const { window } = props;
     const classes = useStyles();
     const theme = styles_1.useTheme();
+    const matches = useMediaQuery_1.default(theme.breakpoints.down('sm'));
     const [mobileOpen, setMobileOpen] = react_1.default.useState(false);
     const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
+        if (matches) {
+            setMobileOpen(!mobileOpen);
+        }
+        ;
     };
     const container = window !== undefined ? () => window().document.body : undefined;
     return (react_1.default.createElement("div", { className: classes.root },
@@ -90,7 +95,7 @@ exports.App = (props) => {
                 react_1.default.createElement(Drawer_1.default, { classes: {
                         paper: classes.drawerPaper
                     }, variant: "permanent", open: true },
-                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, null)))),
+                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, { closeHandler: handleDrawerToggle })))),
         react_1.default.createElement("main", { className: classes.content },
             react_1.default.createElement("div", { className: classes.toolbar }),
             react_1.default.createElement(Container_1.default, { maxWidth: "lg" },
