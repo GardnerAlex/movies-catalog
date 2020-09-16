@@ -82,7 +82,7 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     );
     fetchMoviesDetails({ queryType: location, pageId: pageNum, ...match.match.params })
       .then(res => {
-        console.log(`${location} Axios resp`, res);
+        console.log(`${location} Axios resp `, res);
         setMoviesData(res.data);
         setLoading(false);
       })
