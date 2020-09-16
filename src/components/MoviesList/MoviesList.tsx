@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const MoviesList = (match: { location: { search: any; pathname: string; }; match: { params: { genreTitle: string; }; }; }) => {
+export const MoviesList = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
   const history = useHistory();
   const [moviesData, setMoviesData] = useState<IMovieApiResponse>({
     page: 0,
@@ -43,28 +43,32 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
   const location = match.location.pathname.split('/')[1];
   const numCheck = new RegExp('^[0-9]+$');
   console.log('match', match);
-  console.log('location', location);
+  console.log('history.location', history.location);
   const classes = useStyles();
   const myName = 'MoviesList';
   let pageTitle = 'Main page';
   if (location !== undefined) {
     pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
     if (location === 'genres') {
-      pageTitle = `${match.match.params.genreTitle.charAt(0).toUpperCase()}${match.match.params.genreTitle.slice(1)} Movies`;
+      pageTitle = `${match.match.params.genreName.charAt(0).toUpperCase()}${match.match.params.genreName.slice(1)} Movies`;
     }
   }
   // queryString is priority on pagination. If we directly hit to some page, we will set pagination number from query
   let pageNum: number;
   const pageNumParsed = queryString.parse(match.location.search).page;
+  console.log('pageNum', pageNum);
+  console.log('pageNumParsed', pageNumParsed);
   if (numCheck.test(pageNumParsed) === true) {
     // todo define for what req types pagination is allowed
     pageNum = Number.parseInt(pageNumParsed, 10);
     if (pageNum !== pageNumPagination) {
       setPageNumPagination(pageNum);
-    } else if (pageNum === undefined) {
-      setPageNumPagination(1);
     }
   }
+  // if (pageNumParsed === undefined) {
+  //   console.log('pageNum undef in if', pageNum);
+  //   setPageNumPagination(1);
+  // }
 
   useEffect(() => {
     console.log(`UseEffect fired on page ${myName} `);
@@ -86,6 +90,7 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
         setErrorMessage(err.toString());
         setLoading(false);
       });
+    return () => setPageNumPagination(1);
   }, [history.location]);
 
   const handlePageChange = (event: any, value: number) => {

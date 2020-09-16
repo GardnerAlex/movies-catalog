@@ -49,7 +49,7 @@ exports.Routes = [
         component: MovieDetails_1.MovieDetails
     },
     {
-        path: '/genres/:genreTitle',
+        path: '/genres/:genreName',
         urlPath: '',
         toMenu: false,
         sidebarName: 'Genres',

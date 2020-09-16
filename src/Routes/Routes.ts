@@ -53,7 +53,7 @@ export const Routes = [
   //   component: ComingSoon
   // },
   {
-    path: '/genres/:genreTitle',
+    path: '/genres/:genreName',
     urlPath: '',
     toMenu: false,
     sidebarName: 'Genres',

@@ -40,25 +40,24 @@ exports.MoviesList = (match) => {
     const location = match.location.pathname.split('/')[1];
     const numCheck = new RegExp('^[0-9]+$');
     console.log('match', match);
-    console.log('location', location);
+    console.log('history.location', history.location);
     const classes = useStyles();
     const myName = 'MoviesList';
     let pageTitle = 'Main page';
     if (location !== undefined) {
         pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
         if (location === 'genres') {
-            pageTitle = `${match.match.params.genreTitle.charAt(0).toUpperCase()}${match.match.params.genreTitle.slice(1)} Movies`;
+            pageTitle = `${match.match.params.genreName.charAt(0).toUpperCase()}${match.match.params.genreName.slice(1)} Movies`;
         }
     }
     let pageNum;
     const pageNumParsed = queryString.parse(match.location.search).page;
+    console.log('pageNum', pageNum);
+    console.log('pageNumParsed', pageNumParsed);
     if (numCheck.test(pageNumParsed) === true) {
         pageNum = Number.parseInt(pageNumParsed, 10);
         if (pageNum !== pageNumPagination) {
             setPageNumPagination(pageNum);
-        }
-        else if (pageNum === undefined) {
-            setPageNumPagination(1);
         }
     }
     react_1.useEffect(() => {
@@ -80,6 +79,7 @@ exports.MoviesList = (match) => {
             setErrorMessage(err.toString());
             setLoading(false);
         });
+        return () => setPageNumPagination(1);
     }, [history.location]);
     const handlePageChange = (event, value) => {
         const query = queryString.parse(match.location.search);
