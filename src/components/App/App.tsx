@@ -44,6 +44,7 @@ export const App = () => {
   const classes = useStyles();
   const [moviesData, setMoviesData] = useState<IMovieApiResponse>({
     page: 0,
+    // test
     results: [],
     total_pages: 0,
     total_results: 0
