@@ -5,12 +5,13 @@ import { Rating } from '@material-ui/lab';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
-import {IconButton, IconButtonProps, Tooltip} from '@material-ui/core';
+import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 
 import { apiSettings, genresObj } from '../../api/apiDefaults';
-import { ImoviesData } from '../../interfaces/interfaces';
+import { IMovieApiResponse, ImoviesData } from '../../interfaces/interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '150%' // 16:9
     },
     actions: {
+      flex: 1,
       height: theme.spacing(1),
       padding: '10px 10px 8px 15px',
       marginTop: '10px',
@@ -39,17 +41,40 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Movie = (props: {movie: ImoviesData}) => {
+export const Movie = (props: {movie: ImoviesData, addToLocalStorageHandler: Function,
+  deleteFromLocalStorageHandler: Function, watchLaterState: any, favoritesState: any}) => {
   // const history = useHistory();
-  const { movie } = props;
+  const { movie, addToLocalStorageHandler, deleteFromLocalStorageHandler, watchLaterState, favoritesState } = props;
   const classes = useStyles();
-  const [favorites, setFavorites] = useState<IconButtonProps>({ color: 'primary' });
+  // @ts-ignore
+  const [favorites, setFavorites] = useState<IconButtonProps>({ color: favoritesState }); // 'primary' means Not in Favorites
+  const [watchLater, setWatchLater] = useState<IconButtonProps>({ color: watchLaterState }); // 'primary' means Not in Favorites
 
-  const handleFavoritesClick = () => {
-    if (favorites.color === 'primary') {
-      setFavorites({ color: 'secondary' });
-    } else {
-      setFavorites({ color: 'primary' });
+  const handleClick = (clickType: string) => {
+    // clickType oneOf favorites or watchLater
+    // const localData = localStorage.getItem(clickType);
+    // return localData ? JSON.parse(localData) : [];
+    if (clickType === 'favorites') {
+      if (favorites.color === 'primary') {
+        console.log('---movie handleClick addToLocalStorageHandler', movie);
+        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setFavorites({ color: 'secondary' });
+      } else {
+        console.log('---movie handleClick deleteFromLocalStorageHandler', movie)
+        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setFavorites({ color: 'primary' });
+      }
+    }
+    if (clickType === 'watchlater') {
+      if (watchLater.color === 'primary') {
+        console.log('---movie handleClick addToLocalStorageHandler watchlater', movie);
+        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setWatchLater({ color: 'secondary' });
+      } else {
+        console.log('---movie handleClick deleteFromLocalStorageHandler watchlater', movie)
+        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setWatchLater({ color: 'primary' });
+      }
     }
   };
 
@@ -60,10 +85,6 @@ export const Movie = (props: {movie: ImoviesData}) => {
           className={classes.media}
           image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
           title={movie.title}
-          // onClick={() => {
-          //   console.log('Clicked on movie: ', `/movie/details/${movie.id}/${movie.title}`);
-          //   // history.push(`/movie/${movie.id}/${movie.title}`);
-          // }}
         />
       </Link>
       <CardActions className={classes.actions}>
@@ -72,11 +93,21 @@ export const Movie = (props: {movie: ImoviesData}) => {
             <Rating size="small" name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
           </div>
         </Tooltip>
-        <Tooltip title="Add to Favorites">
+        <Tooltip title="Add to Watch later list">
           <IconButton
             size="small"
             aria-label="add to favorites"
-            onClick={handleFavoritesClick}
+            onClick={() => handleClick('watchlater')}
+            color={watchLater.color}
+          >
+            <BookmarkBorderIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Add to Favorites list">
+          <IconButton
+            size="small"
+            aria-label="add to Watch later list"
+            onClick={() => handleClick('favorites')}
             color={favorites.color}
           >
             <FavoriteIcon />

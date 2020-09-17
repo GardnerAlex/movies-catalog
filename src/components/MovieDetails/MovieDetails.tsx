@@ -4,12 +4,8 @@ import { useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { CircularProgress } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { fetchMoviesDetails } from '../../api/api';
+import { queryMoviesApi } from '../../api/api';
 import { IMovieApiResponse } from '../../interfaces/interfaces';
-import { Movie } from '../Movie/Movie';
-
-const API_KEY = 'd32dade5b7e3663be8be530290d660cc';
-const MOVIE_API_URL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,7 +63,7 @@ export const MovieDetails = (match: { match: { params: { id: string; }; }; locat
       total_results: 0
     }
     );
-    fetchMoviesDetails({ queryType: 'movie_details', movieId: match.match.params.id.split('_')[0] })
+    queryMoviesApi({ queryType: 'movie_details', movieId: match.match.params.id.split('_')[0] })
       .then(res => {
         console.log(`${myName} Axios resp`, res);
         setMovieData(res.data);

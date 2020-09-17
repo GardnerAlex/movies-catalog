@@ -70,7 +70,30 @@ export function MenuTop() {
 
   return (
     <div>
+      <Link to="/watchlater">
+        <Button
+          size="small"
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+        >
+          Later
+        </Button>
+      </Link>
+      <Link to="/favorites">
+        <Button
+          size="small"
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+        >
+          Favorites
+        </Button>
+      </Link>
       <Button
+        size="small"
         aria-controls="customized-menu"
         aria-haspopup="true"
         variant="contained"

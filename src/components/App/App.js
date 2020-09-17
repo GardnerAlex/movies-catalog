@@ -14,11 +14,11 @@ const styles_1 = require("@material-ui/core/styles");
 const Grid_1 = require("@material-ui/core/Grid");
 const react_router_dom_1 = require("react-router-dom");
 const Container_1 = require("@material-ui/core/Container");
+const useMediaQuery_1 = require("@material-ui/core/useMediaQuery");
 const Routes_1 = require("../../Routes/Routes");
 const Footer_1 = require("../Footer");
 const MenuTop_1 = require("../MenuTop/MenuTop");
 const DrawerMenu_1 = require("../DrawerMenu/DrawerMenu");
-const useMediaQuery_1 = require("@material-ui/core/useMediaQuery");
 const drawerWidth = 175;
 const useStyles = styles_1.makeStyles((theme) => ({
     root: {
@@ -70,7 +70,6 @@ exports.App = (props) => {
         if (matches) {
             setMobileOpen(!mobileOpen);
         }
-        ;
     };
     const container = window !== undefined ? () => window().document.body : undefined;
     return (react_1.default.createElement("div", { className: classes.root },

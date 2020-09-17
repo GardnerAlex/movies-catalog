@@ -11,11 +11,11 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link, Route, Switch } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Routes } from '../../Routes/Routes';
 import { Footer } from '../Footer';
 import { MenuTop } from '../MenuTop/MenuTop';
 import { DrawerMenu } from '../DrawerMenu/DrawerMenu';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const drawerWidth = 175;
 
@@ -71,7 +71,7 @@ export const App = (props: { window: any; }) => {
   const handleDrawerToggle = () => {
     if (matches) {
       setMobileOpen(!mobileOpen);
-    };
+    }
   };
 
   // const handleDesctopDrawerToggle = () => {

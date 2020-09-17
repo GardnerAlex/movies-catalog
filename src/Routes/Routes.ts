@@ -19,6 +19,8 @@ export const Routes = [
     path: '/trending',
     urlPath: '/trending',
     toMenu: true,
+    description: 'This week most interesting movies to watch',
+    image: 'http://image.tmdb.org/t/p/w300/pq0JSpwyT2URytdFG0euztQPAyR.jpg',
     icon: TrendingUpSharpIcon,
     sidebarName: 'Trending',
     component: MoviesList
@@ -27,6 +29,8 @@ export const Routes = [
     path: '/nowPlaying',
     urlPath: '/nowplaying',
     toMenu: true,
+    description: 'Movies, which you can now watch in the movie theatre',
+    image: 'http://image.tmdb.org/t/p/w300/r5srC0cqU36n38azFnCyReEksiR.jpg',
     icon: FiberNewSharpIcon,
     sidebarName: 'Now playing',
     component: MoviesList
@@ -34,6 +38,8 @@ export const Routes = [
   {
     path: '/popular',
     urlPath: '/popular',
+    description: 'Popular movies according to their rating and users opinions',
+    image: 'http://image.tmdb.org/t/p/w300/zzWGRw277MNoCs3zhyG3YmYQsXv.jpg',
     toMenu: true,
     icon: TheatersSharpIcon,
     sidebarName: 'Popular',
@@ -46,12 +52,18 @@ export const Routes = [
     sidebarName: 'Movie',
     component: MovieDetails
   },
-  // {
-  //   path: '/upcoming',
-  //   toMenu: true,
-  //   sidebarName: 'upcoming',
-  //   component: ComingSoon
-  // },
+  {
+    path: '/favorites',
+    toMenu: false,
+    sidebarName: '',
+    component: MoviesList
+  },
+  {
+    path: '/watchlater',
+    toMenu: false,
+    sidebarName: '',
+    component: MoviesList
+  },
   {
     path: '/genres/:genreName',
     urlPath: '',

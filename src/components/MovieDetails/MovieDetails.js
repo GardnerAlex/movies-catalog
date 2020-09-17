@@ -8,8 +8,6 @@ const Grid_1 = require("@material-ui/core/Grid");
 const core_1 = require("@material-ui/core");
 const styles_1 = require("@material-ui/core/styles");
 const api_1 = require("../../api/api");
-const API_KEY = 'd32dade5b7e3663be8be530290d660cc';
-const MOVIE_API_URL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`;
 const useStyles = styles_1.makeStyles((theme) => styles_1.createStyles({
     root: {
         flexGrow: 1
@@ -54,7 +52,7 @@ exports.MovieDetails = (match) => {
             total_pages: 0,
             total_results: 0
         });
-        api_1.fetchMoviesDetails({ queryType: 'movie_details', movieId: match.match.params.id.split('_')[0] })
+        api_1.queryMoviesApi({ queryType: 'movie_details', movieId: match.match.params.id.split('_')[0] })
             .then(res => {
             console.log(`${myName} Axios resp`, res);
             setMovieData(res.data);

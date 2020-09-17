@@ -1,15 +1,16 @@
 import axios from 'axios';
-import { IlocalApiRequest } from '../interfaces/interfaces';
+import {IApiResponse, IApiRespResults, IlocalApiRequest, ImoviesData} from '../interfaces/interfaces';
 import { genresFromApi } from './apiDefaults';
+import { stubRespFavorites } from './stubResponses';
 
 const API_KEY = 'd32dade5b7e3663be8be530290d660cc';
 const POPULAR_API_URL = 'https://api.themoviedb.org/3/movie/popular';
 const TRENDING_API_URL = 'https://api.themoviedb.org/3/trending/movie/week';
+const NOW_PLAYING_API_URL = 'https://api.themoviedb.org/3/movie/now_playing';
 // search with diff params
 // https://developers.themoviedb.org/3/discover/movie-discover
 // https://api.themoviedb.org/3/discover/movie?api_key=d32dade5b7e3663be8be530290d660cc&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_genres=28
 const SEARCH_WITH_PARAMS_PATH = 'https://api.themoviedb.org/3/discover/movie';
-// https://api.themoviedb.org/3/movie/337401?api_key=d32dade5b7e3663be8be530290d660cc&language=en-US
 const BASE_MOVIE_PATH = 'https://api.themoviedb.org/3/movie/';
 export const SEARCH_MOVIE_PATH = 'https://api.themoviedb.org/3/search/movie';
 export const BASE_URL_PATH = 'https://api.themoviedb.org/3/';
@@ -26,7 +27,7 @@ const queryUrl = (params: IlocalApiRequest) => {
     return '';
   };
 
-  const queryTemplate: {movie_details: {url: string;}; popular: {url: string;}; trending: {url: string;}, genres: {url: string;}} = {
+  const queryTemplate: {movie_details: {url: string;}; popular: {url: string;}; trending: {url: string;}; nowplaying: {url: string;}, genres: {url: string;}} = {
     movie_details: {
       url: `${BASE_MOVIE_PATH}${params.movieId}?api_key=${API_KEY}`
     },
@@ -35,6 +36,9 @@ const queryUrl = (params: IlocalApiRequest) => {
     },
     trending: {
       url: `${TRENDING_API_URL}?api_key=${API_KEY}${params.pageId ? `&page=${params.pageId}` : ''}`
+    },
+    nowplaying: {
+      url: `${NOW_PLAYING_API_URL}?api_key=${API_KEY}${params.pageId ? `&page=${params.pageId}` : ''}`
     },
     genres: {
       url: `${SEARCH_WITH_PARAMS_PATH}?api_key=${API_KEY}${params.pageId ? `&page=${params.pageId}` : ''}${params.genreName ? `&with_genres=${getGenreId(params.genreName)}` : ''}`
@@ -45,7 +49,7 @@ const queryUrl = (params: IlocalApiRequest) => {
   return resUrl;
 };
 
-export const fetchMoviesDetails = (inputParams: IlocalApiRequest) => {
+export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiResponse> => {
   console.log('fetchMoviesDetails input', inputParams);
   const url = queryUrl(inputParams);
   console.log('fetchMoviesDetails url', url);
@@ -55,4 +59,60 @@ export const fetchMoviesDetails = (inputParams: IlocalApiRequest) => {
       return response;
     });
   // todo insert Catch
+};
+
+export const initLocalStorage = (queryType: string): void => {
+  if (localStorage.getItem(queryType) === null) {
+    console.log('initializing Local Storage for ', queryType);
+    localStorage.setItem(queryType, JSON.stringify([]));
+  }
+};
+
+export const queryLocalStorage = (queryType: string): IApiRespResults => {
+  initLocalStorage(queryType);
+  console.log('query Local Storage', localStorage.getItem(queryType));
+  return { results: JSON.parse(localStorage.getItem(queryType)) };
+};
+
+export const addToLocalStorage = (inputParams: IlocalApiRequest): IApiRespResults => {
+  // return data as Movies Api to perform state update
+  initLocalStorage(inputParams.queryType);
+  console.log('Add to local storage ', inputParams.queryType);
+  const tmpLocalStorage: Array<ImoviesData> = JSON.parse(localStorage.getItem(inputParams.queryType));
+  if (tmpLocalStorage.findIndex(item => item.id === inputParams.movieDataToAdd.id) === -1) {
+    tmpLocalStorage.push(inputParams.movieDataToAdd);
+    localStorage.setItem(inputParams.queryType, JSON.stringify(tmpLocalStorage));
+  }
+  return queryLocalStorage(inputParams.queryType);
+};
+
+export const deleteFromLocalStorage = (inputParams: IlocalApiRequest): IApiRespResults => {
+  initLocalStorage(inputParams.queryType);
+  console.log('delete from local storage ', inputParams.queryType);
+  const tmpLocalStorage: Array<ImoviesData> = JSON.parse(localStorage.getItem(inputParams.queryType));
+  const movieIndexInStorage = tmpLocalStorage.findIndex(item => item.id === inputParams.movieDataToAdd.id);
+  if (movieIndexInStorage !== -1) {
+    tmpLocalStorage.splice(movieIndexInStorage, 1);
+    localStorage.setItem(inputParams.queryType, JSON.stringify(tmpLocalStorage));
+  }
+  return queryLocalStorage(inputParams.queryType);
+};
+
+export const getPersonalMoviesInfo = (inputParams: IlocalApiRequest): Promise<IApiResponse> => {
+  // stubRespFavorites.pages = 1;
+  const res:IApiResponse = {
+    data: queryLocalStorage(inputParams.queryType),
+    page: 1,
+    total_pages: 1,
+    total_results: 2
+  };
+  return new Promise<IApiResponse>(resolve => resolve(res));
+};
+
+export const processApiRequest = (inputParams: IlocalApiRequest) => {
+  // route logic depending on queryType value
+  if (inputParams.queryType === 'favorites' || inputParams.queryType === 'watchlater') {
+    return getPersonalMoviesInfo(inputParams);
+  }
+  return queryMoviesApi(inputParams);
 };

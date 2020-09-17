@@ -4,6 +4,7 @@ export interface ImoviesData {
     "video": boolean;
     "poster_path": string;
     "id": number;
+    media_type: string;
     "adult": boolean;
     "backdrop_path": string;
     "original_language": string;
@@ -16,15 +17,26 @@ export interface ImoviesData {
 }
 
 export interface IMovieApiResponse {
-    page: number;
-    total_results: number;
-    total_pages: number;
-    results: Array<ImoviesData>
+    results: Array<ImoviesData>;
+    page?: number;
+    total_results?: number;
+    total_pages?: number;
 }
 
 export interface IlocalApiRequest {
+    movieDataToAdd?: ImoviesData;
     queryType: string;
     pageId?: number;
     movieId?: number | string;
     genreName?: string;
+}
+
+export interface IApiRespResults {
+    results: Array<ImoviesData>
+}
+export interface IApiResponse {
+    data: IApiRespResults;
+    page?: number;
+    total_pages?: number;
+    total_results?: number;
 }

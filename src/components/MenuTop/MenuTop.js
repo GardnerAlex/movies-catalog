@@ -52,7 +52,11 @@ function MenuTop() {
         return genres;
     };
     return (react_1.default.createElement("div", null,
-        react_1.default.createElement(Button_1.default, { "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary", onClick: handleClick }, "Genres"),
+        react_1.default.createElement(react_router_dom_1.Link, { to: "/watchlater" },
+            react_1.default.createElement(Button_1.default, { size: "small", "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary" }, "Later")),
+        react_1.default.createElement(react_router_dom_1.Link, { to: "/favorites" },
+            react_1.default.createElement(Button_1.default, { size: "small", "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary" }, "Favorites")),
+        react_1.default.createElement(Button_1.default, { size: "small", "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary", onClick: handleClick }, "Genres"),
         react_1.default.createElement(StyledMenu, { id: "customized-menu", anchorEl: anchorEl, keepMounted: true, open: Boolean(anchorEl), onClose: handleClose }, genresItems())));
 }
 exports.MenuTop = MenuTop;
