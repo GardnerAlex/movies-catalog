@@ -19,26 +19,27 @@ import { Footer } from '../Footer';
 import { DrawerMenu } from '../DrawerMenu/DrawerMenu';
 
 const drawerWidth = 220;
+const breakPoint = 'md';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex'
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up(breakPoint)]: {
       width: drawerWidth,
       flexShrink: 0
     }
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up(breakPoint)]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth
     }
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up(breakPoint)]: {
       display: 'none'
     }
   },
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuTitle: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down(breakPoint)]: {
       display: 'none'
     }
   },
@@ -66,16 +67,15 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    [theme.breakpoints.down(breakPoint)]:
+    {
+      padding: theme.spacing(1)
+
+    }
   },
   pushRight: {
     marginLeft: 'auto'
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    }
   },
   search: {
     position: 'relative',
@@ -121,14 +121,18 @@ export const App = (props: { window: any; }) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
-  const handleDrawerToggle = () => {
-    if (matches) {
+  const handleDrawerMenuItemCLick = () => {
+    if (isMobile) {
       setMobileOpen(!mobileOpen);
     }
+  };
+
+  const handleDrawerSwitch = () => {
+    setMobileOpen(!mobileOpen);
   };
 
   const handleEnter = (e: { keyCode: number; }) => {
@@ -157,7 +161,7 @@ export const App = (props: { window: any; }) => {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={handleDrawerToggle}
+            onClick={handleDrawerSwitch}
             className={classes.menuButton}
           >
             <MenuIcon />
@@ -198,7 +202,7 @@ export const App = (props: { window: any; }) => {
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
-            onClose={handleDrawerToggle}
+            onClose={handleDrawerSwitch}
             classes={{
               paper: classes.drawerPaper
             }}
@@ -206,18 +210,18 @@ export const App = (props: { window: any; }) => {
               keepMounted: true // Better open performance on mobile.
             }}
           >
-            <DrawerMenu closeHandler={handleDrawerToggle} />
+            <DrawerMenu isMobile={isMobile} closeHandler={handleDrawerMenuItemCLick} />
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper
             }}
             variant="permanent"
-            open
+            open={mobileOpen}
           >
-            <DrawerMenu closeHandler={handleDrawerToggle} />
+            <DrawerMenu isMobile={isMobile} closeHandler={handleDrawerMenuItemCLick} />
           </Drawer>
         </Hidden>
       </nav>

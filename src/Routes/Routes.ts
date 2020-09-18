@@ -30,7 +30,7 @@ export const Routes = [
     component: MoviesList
   },
   {
-    path: '/nowPlaying',
+    path: '/nowplaying',
     urlPath: '/nowplaying',
     toMenu: true,
     toHomePage: true,

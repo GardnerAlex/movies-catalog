@@ -114,7 +114,7 @@ export const HomePage = () => {
               {' '}
               and
               {' '}
-              <Link to="watchlater">Watch later</Link>
+              <Link to="/watchlater">Watch later</Link>
               {' '}
               functionality
             </Typography>

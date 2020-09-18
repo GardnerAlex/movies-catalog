@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const DrawerMenu = (props: { closeHandler: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void; }) => {
+export const DrawerMenu = (props: {closeHandler: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void; }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const menuList: ReactNode[] = [];
@@ -66,10 +66,6 @@ export const DrawerMenu = (props: { closeHandler: (event: React.MouseEvent<HTMLD
     );
   });
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
   return (
     <List
       disablePadding
@@ -84,7 +80,7 @@ export const DrawerMenu = (props: { closeHandler: (event: React.MouseEvent<HTMLD
     >
       {menuList}
       <Divider />
-      <ListItem button onClick={handleClick} key="genres">
+      <ListItem button key="genres" onClick={() => { setOpen(!open); }}>
         <ListItemIcon>
           <MovieFilterIcon fontSize="small" />
         </ListItemIcon>

@@ -1,99 +1,119 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import { CircularProgress } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { queryMoviesApi } from '../../api/api';
-import { IMovieApiResponse } from '../../interfaces/interfaces';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Rating } from '@material-ui/lab';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
+import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import { apiSettings, genresObj } from '../../api/apiDefaults';
+import { ImoviesData } from '../../interfaces/interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1
+      width: 250,
+      height: '100%',
+      paddingTop: 0,
+      backgroundColor: '#fff'
     },
-    paper: {
-      padding: theme.spacing(4),
-      textAlign: 'right',
-      color: theme.palette.text.secondary
-      // width: '350px'
+    media: {
+      height: 0,
+      paddingTop: '150%' // 16:9
     },
-    control: {
-      padding: theme.spacing(2)
+    actions: {
+      flex: 1,
+      height: theme.spacing(1),
+      padding: '10px 10px 8px 15px',
+      marginTop: '10px',
+      justifyContent: 'space-between'
     },
-    mainGrid: {
-      marginTop: theme.spacing(3)
+    textBox: {
+      margin: '5px 15px'
     },
-    progress: {
-      margin: theme.spacing(2)
+    rating: {
+      // padding: '12px 15px'
     }
   })
 );
 
-export const MovieDetails = (match: { match: { params: { id: string; }; }; location: { pathname: string; }; }) => {
-  const myName = 'MovieDetails';
-  const history = useHistory();
-  console.log(myName);
-  console.log('history', history);
-  // const { params } = match;
-  console.log(`${myName} match`, match);
-  console.log(`${myName} match.match.params.id`, match.match.params.id.split('_')[0]);
-  // console.log('Genres match.params.path', match);
+export const MovieDetails = (props: {movie: ImoviesData, addToLocalStorageHandler: Function,
+  deleteFromLocalStorageHandler: Function, watchLaterState: any, favoritesState: any}) => {
+  // const history = useHistory();
+  const { movie, addToLocalStorageHandler, deleteFromLocalStorageHandler, watchLaterState, favoritesState } = props;
   const classes = useStyles();
-  const [movieData, setMovieData] = useState<IMovieApiResponse>({
-    page: 0,
-    results: [],
-    total_pages: 0,
-    total_results: 0
-  });
-  // const [query, setQuery] = useState('');
-  // const [url, setUrl] = useState(
-  //   ''
-  // );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>(null);
+  // @ts-ignore
+  const [favorites, setFavorites] = useState<IconButtonProps>({ color: favoritesState }); // 'primary' means Not in Favorites
+  const [watchLater, setWatchLater] = useState<IconButtonProps>({ color: watchLaterState }); // 'primary' means Not in Favorites
 
-  useEffect(() => {
-    console.log('UseEffect fired', myName);
-    setLoading(true);
-    setMovieData({
-      page: 0,
-      results: [],
-      total_pages: 0,
-      total_results: 0
+  const handleClick = (clickType: string) => {
+    if (clickType === 'favorites') {
+      if (favorites.color === 'primary') {
+        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setFavorites({ color: 'secondary' });
+      } else {
+        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setFavorites({ color: 'primary' });
+      }
     }
-    );
-    queryMoviesApi({ queryType: 'movie_details', movieId: match.match.params.id.split('_')[0] })
-      .then(res => {
-        console.log(`${myName} Axios resp`, res);
-        setMovieData(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setErrorMessage(err.toString());
-        setLoading(false);
-      });
-  }, [match.location.pathname]);
+    if (clickType === 'watchlater') {
+      if (watchLater.color === 'primary') {
+        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setWatchLater({ color: 'secondary' });
+      } else {
+        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
+        setWatchLater({ color: 'primary' });
+      }
+    }
+  };
 
   return (
-    <>
-      <Grid container className={classes.root} spacing={3}>
-        <Grid item xs={12}>
-          <Grid container justify="center" spacing={2}>
-            {loading
-            && <CircularProgress className={classes.progress} />}
-            {errorMessage
-            && <span>{errorMessage}</span>}
-            {movieData
-            && (
-            <span>
-              TITLE HERE
-              {JSON.stringify(movieData)}
-            </span>
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
+    <Card className={classes.root}>
+      <Link to={`/moviedetails/${movie.id}_${movie.title}`} key={movie.id}>
+        <CardMedia
+          className={classes.media}
+          image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}
+          title={movie.title}
+        />
+      </Link>
+      <CardActions className={classes.actions}>
+        <Tooltip title="User rating">
+          <div aria-label="user rating" className={classes.rating}>
+            <Rating size="small" name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
+          </div>
+        </Tooltip>
+        <Tooltip title="Add to Watch later list">
+          <IconButton
+            size="small"
+            aria-label="add to favorites"
+            onClick={() => handleClick('watchlater')}
+            color={watchLater.color}
+          >
+            <BookmarkBorderIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Add to Favorites list">
+          <IconButton
+            size="small"
+            aria-label="add to Watch later list"
+            onClick={() => handleClick('favorites')}
+            color={favorites.color}
+          >
+            <FavoriteIcon />
+          </IconButton>
+        </Tooltip>
+      </CardActions>
+      <div className={classes.textBox}>
+        <Typography variant="body1" component="h3">
+          {movie.title}
+        </Typography>
+        <Typography variant="caption">
+          {`Genre: ${genresObj[movie.genre_ids[0]]} | ${movie.release_date.slice(0, 4)}`}
+        </Typography>
+      </div>
+    </Card>
   );
 };

@@ -87,7 +87,7 @@ exports.HomePage = () => {
                         ' ',
                         "and",
                         ' ',
-                        React.createElement(react_router_dom_1.Link, { to: "watchlater" }, "Watch later"),
+                        React.createElement(react_router_dom_1.Link, { to: "/watchlater" }, "Watch later"),
                         ' ',
                         "functionality"))),
             React.createElement(Container_1.default, { className: classes.cardGrid, maxWidth: "lg" },

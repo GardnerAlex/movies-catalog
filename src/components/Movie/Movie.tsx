@@ -72,7 +72,7 @@ export const Movie = (props: {movie: ImoviesData, addToLocalStorageHandler: Func
 
   return (
     <Card className={classes.root}>
-      <Link to={`/moviedetails/${movie.id}_${movie.title}`} key={movie.id}>
+      <Link to={`/moviedetails/${movie.id}_${movie.title}`} key={movie.id} >
         <CardMedia
           className={classes.media}
           image={`${apiSettings.images.base_url}${apiSettings.images.poster_sizes[4]}${movie.poster_path}`}

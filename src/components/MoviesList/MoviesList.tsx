@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { CircularProgress, Container } from '@material-ui/core';
+import {CircularProgress, Container, Divider} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     progress: {
       margin: theme.spacing(4)
+    },
+    title: {
+      marginBottom: theme.spacing(2),
     }
   })
 );
@@ -79,7 +82,10 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
         setErrorMessage(err.toString());
         setLoading(false);
       });
-    return () => setPageNumPagination(1);
+    return () => {
+      setPageNumPagination(1);
+      setErrorMessage(null);
+    };
   }, [history.location]);
 
   const handlePageChange = (event: any, value: number) => {
@@ -147,10 +153,11 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     <>
       {moviesData
       && (
-      <Container>
+      <Container className={classes.title}>
         <Typography variant="h4" component="h1">
           {pageTitle}
         </Typography>
+        <Divider />
       </Container>
       )}
       <Grid container justify="center" spacing={2}>

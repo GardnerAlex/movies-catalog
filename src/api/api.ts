@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {IApiResponse, IApiRespResults, IlocalApiRequest, ImoviesData} from '../interfaces/interfaces';
+import { IApiResponse, IApiRespResults, IlocalApiRequest, ImoviesData } from '../interfaces/interfaces';
 import { genresFromApi } from './apiDefaults';
 import { stubRespFavorites } from './stubResponses';
 
