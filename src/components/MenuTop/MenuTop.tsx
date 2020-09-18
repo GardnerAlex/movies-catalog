@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { ReactNode, useState } from 'react';
+import {createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,11 +9,23 @@ import MovieFilterIcon from '@material-ui/icons/MovieFilter';
 import { Link } from 'react-router-dom';
 import { genresObj } from '../../api/apiDefaults';
 
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5'
-  }
-})((props: MenuProps) => (
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+        '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+          color: theme.palette.common.white
+        }
+      }
+    },
+    paper: {
+      border: '1px solid #d3d4d5'
+    }
+  })
+);
+
+const StyledMenu = (props: MenuProps) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
@@ -27,21 +39,11 @@ const StyledMenu = withStyles({
     }}
     {...props}
   />
-));
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: theme.palette.common.white
-      }
-    }
-  }
-}))(MenuItem);
+);
 
 export function MenuTop() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,12 +58,12 @@ export function MenuTop() {
     Object.keys(genresObj).map((genresItem) => {
       genres.push(// @ts-ignore
         <Link to={`/genres/${genresObj[genresItem].charAt(0).toLowerCase()}${genresObj[genresItem].slice(1)}`} key={genresItem}>
-          <StyledMenuItem key={genresItem} onClick={handleClose}>
+          <MenuItem className={classes.root} key={genresItem} onClick={handleClose}>
             <ListItemIcon>
               <MovieFilterIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary={genresObj[genresItem]} />
-          </StyledMenuItem>
+          </MenuItem>
         </Link>
       );
     });
@@ -104,6 +106,7 @@ export function MenuTop() {
       </Button>
       <StyledMenu
         id="customized-menu"
+        className={classes.paper}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}

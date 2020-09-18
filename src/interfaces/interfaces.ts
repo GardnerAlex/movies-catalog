@@ -26,6 +26,7 @@ export interface IMovieApiResponse {
 export interface IlocalApiRequest {
     movieDataToAdd?: ImoviesData;
     queryType: string;
+    query?: string;
     pageId?: number;
     movieId?: number | string;
     genreName?: string;

@@ -11,18 +11,7 @@ const ListItemText_1 = require("@material-ui/core/ListItemText");
 const MovieFilter_1 = require("@material-ui/icons/MovieFilter");
 const react_router_dom_1 = require("react-router-dom");
 const apiDefaults_1 = require("../../api/apiDefaults");
-const StyledMenu = styles_1.withStyles({
-    paper: {
-        border: '1px solid #d3d4d5'
-    }
-})((props) => (react_1.default.createElement(Menu_1.default, Object.assign({ elevation: 0, getContentAnchorEl: null, anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'center'
-    }, transformOrigin: {
-        vertical: 'top',
-        horizontal: 'center'
-    } }, props))));
-const StyledMenuItem = styles_1.withStyles((theme) => ({
+const useStyles = styles_1.makeStyles((theme) => styles_1.createStyles({
     root: {
         '&:focus': {
             backgroundColor: theme.palette.primary.main,
@@ -30,10 +19,21 @@ const StyledMenuItem = styles_1.withStyles((theme) => ({
                 color: theme.palette.common.white
             }
         }
+    },
+    paper: {
+        border: '1px solid #d3d4d5'
     }
-}))(MenuItem_1.default);
+}));
+const StyledMenu = (props) => (react_1.default.createElement(Menu_1.default, Object.assign({ elevation: 0, getContentAnchorEl: null, anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'center'
+    }, transformOrigin: {
+        vertical: 'top',
+        horizontal: 'center'
+    } }, props)));
 function MenuTop() {
-    const [anchorEl, setAnchorEl] = react_1.default.useState(null);
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = react_1.useState(null);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -44,7 +44,7 @@ function MenuTop() {
         const genres = [];
         Object.keys(apiDefaults_1.genresObj).map((genresItem) => {
             genres.push(react_1.default.createElement(react_router_dom_1.Link, { to: `/genres/${apiDefaults_1.genresObj[genresItem].charAt(0).toLowerCase()}${apiDefaults_1.genresObj[genresItem].slice(1)}`, key: genresItem },
-                react_1.default.createElement(StyledMenuItem, { key: genresItem, onClick: handleClose },
+                react_1.default.createElement(MenuItem_1.default, { className: classes.root, key: genresItem, onClick: handleClose },
                     react_1.default.createElement(ListItemIcon_1.default, null,
                         react_1.default.createElement(MovieFilter_1.default, { fontSize: "small" })),
                     react_1.default.createElement(ListItemText_1.default, { primary: apiDefaults_1.genresObj[genresItem] }))));
@@ -57,7 +57,7 @@ function MenuTop() {
         react_1.default.createElement(react_router_dom_1.Link, { to: "/favorites" },
             react_1.default.createElement(Button_1.default, { size: "small", "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary" }, "Favorites")),
         react_1.default.createElement(Button_1.default, { size: "small", "aria-controls": "customized-menu", "aria-haspopup": "true", variant: "contained", color: "primary", onClick: handleClick }, "Genres"),
-        react_1.default.createElement(StyledMenu, { id: "customized-menu", anchorEl: anchorEl, keepMounted: true, open: Boolean(anchorEl), onClose: handleClose }, genresItems())));
+        react_1.default.createElement(StyledMenu, { id: "customized-menu", className: classes.paper, anchorEl: anchorEl, keepMounted: true, open: Boolean(anchorEl), onClose: handleClose }, genresItems())));
 }
 exports.MenuTop = MenuTop;
 //# sourceMappingURL=MenuTop.js.map

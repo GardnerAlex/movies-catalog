@@ -7,12 +7,10 @@ const API_KEY = 'd32dade5b7e3663be8be530290d660cc';
 const POPULAR_API_URL = 'https://api.themoviedb.org/3/movie/popular';
 const TRENDING_API_URL = 'https://api.themoviedb.org/3/trending/movie/week';
 const NOW_PLAYING_API_URL = 'https://api.themoviedb.org/3/movie/now_playing';
-// search with diff params
-// https://developers.themoviedb.org/3/discover/movie-discover
-// https://api.themoviedb.org/3/discover/movie?api_key=d32dade5b7e3663be8be530290d660cc&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_genres=28
+// documentation: https://developers.themoviedb.org/3/search/search-movies
 const SEARCH_WITH_PARAMS_PATH = 'https://api.themoviedb.org/3/discover/movie';
 const BASE_MOVIE_PATH = 'https://api.themoviedb.org/3/movie/';
-export const SEARCH_MOVIE_PATH = 'https://api.themoviedb.org/3/search/movie';
+const SEARCH_MOVIE_PATH = 'https://api.themoviedb.org/3/search/movie';
 export const BASE_URL_PATH = 'https://api.themoviedb.org/3/';
 export const BASE_POSTER_PATH = 'https://image.tmdb.org/t/p';
 export const BASE_BACKDROP_PATH = 'https://image.tmdb.org/t/p/original';
@@ -20,14 +18,14 @@ export const BASE_BACKDROP_PATH = 'https://image.tmdb.org/t/p/original';
 const queryUrl = (params: IlocalApiRequest) => {
   const getGenreId = (genreTitle: string) => {
     const result = genresFromApi.filter((item => item.name.toLowerCase() === genreTitle.toLowerCase()));
-    console.log('result', result);
+    console.log('genresFromApi.filter result', result);
     if (result !== undefined && result.length > 0) {
       return result[0].id;
     }
     return '';
   };
 
-  const queryTemplate: {movie_details: {url: string;}; popular: {url: string;}; trending: {url: string;}; nowplaying: {url: string;}, genres: {url: string;}} = {
+  const queryTemplate: {movie_details: {url: string;}; search: {url: string;}; popular: {url: string;}; trending: {url: string;}; nowplaying: {url: string;}, genres: {url: string;}} = {
     movie_details: {
       url: `${BASE_MOVIE_PATH}${params.movieId}?api_key=${API_KEY}`
     },
@@ -36,6 +34,9 @@ const queryUrl = (params: IlocalApiRequest) => {
     },
     trending: {
       url: `${TRENDING_API_URL}?api_key=${API_KEY}${params.pageId ? `&page=${params.pageId}` : ''}`
+    },
+    search: {
+      url: `${SEARCH_MOVIE_PATH}?api_key=${API_KEY}&query=${params.query}${params.pageId ? `&page=${params.pageId}` : ''}`
     },
     nowplaying: {
       url: `${NOW_PLAYING_API_URL}?api_key=${API_KEY}${params.pageId ? `&page=${params.pageId}` : ''}`
@@ -55,7 +56,7 @@ export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiRespon
   console.log('fetchMoviesDetails url', url);
   return axios(url)
     .then(response => {
-      console.log('axios then response', response);
+      // console.log('axios then response', response);
       return response;
     });
   // todo insert Catch
@@ -70,7 +71,7 @@ export const initLocalStorage = (queryType: string): void => {
 
 export const queryLocalStorage = (queryType: string): IApiRespResults => {
   initLocalStorage(queryType);
-  console.log('query Local Storage', localStorage.getItem(queryType));
+  // console.log('query Local Storage', localStorage.getItem(queryType));
   return { results: JSON.parse(localStorage.getItem(queryType)) };
 };
 

@@ -44,24 +44,20 @@ exports.Movie = (props) => {
     const handleClick = (clickType) => {
         if (clickType === 'favorites') {
             if (favorites.color === 'primary') {
-                console.log('---movie handleClick addToLocalStorageHandler', movie);
                 addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setFavorites({ color: 'secondary' });
             }
             else {
-                console.log('---movie handleClick deleteFromLocalStorageHandler', movie);
                 deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setFavorites({ color: 'primary' });
             }
         }
         if (clickType === 'watchlater') {
             if (watchLater.color === 'primary') {
-                console.log('---movie handleClick addToLocalStorageHandler watchlater', movie);
                 addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setWatchLater({ color: 'secondary' });
             }
             else {
-                console.log('---movie handleClick deleteFromLocalStorageHandler watchlater', movie);
                 deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setWatchLater({ color: 'primary' });
             }

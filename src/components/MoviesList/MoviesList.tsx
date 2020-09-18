@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const MoviesList = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
+  const classes = useStyles();
   const history = useHistory();
   const initMoviesData: IMovieApiResponse = { page: 0, results: [], total_pages: 0, total_results: 0 };
   const [moviesData, setMoviesData] = useState<IMovieApiResponse>(initMoviesData);
@@ -42,7 +43,6 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
   const numCheck = new RegExp('^[0-9]+$');
   console.log('match', match);
   console.log('history.location', history.location);
-  const classes = useStyles();
   const myName = 'MoviesList';
   let pageTitle = 'Main page';
   if (location !== undefined) {
@@ -57,8 +57,6 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
   // queryString is priority on pagination. If we directly hit to some page, we will set pagination number from query
   let pageNum: number;
   const pageNumParsed = queryString.parse(match.location.search).page;
-  console.log('pageNum', pageNum);
-  console.log('pageNumParsed', pageNumParsed);
   if (numCheck.test(pageNumParsed) === true) {
     // todo define for what req types pagination is allowed
     pageNum = Number.parseInt(pageNumParsed, 10);
@@ -132,13 +130,13 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
   const getIconColor = (iconType: string, id: number): string => {
     if (iconType === 'favorites') {
       if (favoritesData.results.findIndex(item => item.id === id) !== -1) {
-        console.log('favoritesData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
+        // console.log('favoritesData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
         return 'secondary';
       }
     }
     if (iconType === 'watchlater') {
       if (watchLaterData.results.findIndex(item => item.id === id) !== -1) {
-        console.log('watchLaterData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
+        // console.log('watchLaterData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
         return 'secondary';
       }
     }
@@ -159,7 +157,7 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
         {loading && <CircularProgress className={classes.progress} />}
         {errorMessage && <span>{errorMessage}</span>}
         {moviesData && moviesData.results.map((movie) => (
-          <Grid className={classes.paper} key={`${movie.poster_path}`} item>
+          <Grid className={classes.paper} key={`${movie.poster_path}${movie.id}${movie.title}`} item>
             <Movie
               movie={movie}
               addToLocalStorageHandler={addToLocalStorageHandler}

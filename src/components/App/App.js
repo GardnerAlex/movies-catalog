@@ -5,6 +5,8 @@ const react_1 = require("react");
 const AppBar_1 = require("@material-ui/core/AppBar");
 const CssBaseline_1 = require("@material-ui/core/CssBaseline");
 const Drawer_1 = require("@material-ui/core/Drawer");
+const InputBase_1 = require("@material-ui/core/InputBase");
+const Search_1 = require("@material-ui/icons/Search");
 const Hidden_1 = require("@material-ui/core/Hidden");
 const IconButton_1 = require("@material-ui/core/IconButton");
 const Menu_1 = require("@material-ui/icons/Menu");
@@ -17,9 +19,8 @@ const Container_1 = require("@material-ui/core/Container");
 const useMediaQuery_1 = require("@material-ui/core/useMediaQuery");
 const Routes_1 = require("../../Routes/Routes");
 const Footer_1 = require("../Footer");
-const MenuTop_1 = require("../MenuTop/MenuTop");
 const DrawerMenu_1 = require("../DrawerMenu/DrawerMenu");
-const drawerWidth = 175;
+const drawerWidth = 220;
 const useStyles = styles_1.makeStyles((theme) => ({
     root: {
         display: 'flex'
@@ -42,6 +43,17 @@ const useStyles = styles_1.makeStyles((theme) => ({
             display: 'none'
         }
     },
+    title: {
+        textDecoration: 'none',
+        display: 'none',
+        [theme.breakpoints.up('sm')]: {
+            display: 'block'
+        }
+    },
+    menuItem: {
+        textDecoration: 'none',
+        color: 'white'
+    },
     menuTitle: {
         marginRight: theme.spacing(2),
         [theme.breakpoints.down('sm')]: {
@@ -58,17 +70,74 @@ const useStyles = styles_1.makeStyles((theme) => ({
     },
     pushRight: {
         marginLeft: 'auto'
+    },
+    sectionDesktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'flex'
+        }
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: styles_1.fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: styles_1.fade(theme.palette.common.white, 0.25)
+        },
+        marginRight: theme.spacing(2),
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto'
+        }
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    inputRoot: {
+        color: 'inherit'
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch'
+        }
     }
 }));
 exports.App = (props) => {
+    const history = react_router_dom_1.useHistory();
     const { window } = props;
     const classes = useStyles();
     const theme = styles_1.useTheme();
     const matches = useMediaQuery_1.default(theme.breakpoints.down('sm'));
-    const [mobileOpen, setMobileOpen] = react_1.default.useState(false);
+    const [mobileOpen, setMobileOpen] = react_1.useState(false);
+    const [searchInput, setSearchInput] = react_1.useState('');
     const handleDrawerToggle = () => {
         if (matches) {
             setMobileOpen(!mobileOpen);
+        }
+    };
+    const handleEnter = (e) => {
+        if (searchInput !== '' && e.keyCode === 13) {
+            history.push(`/search/${searchInput}`);
+            setSearchInput('');
+        }
+    };
+    const handleSearchClick = () => {
+        console.log('handleSearchClick');
+        if (searchInput !== '') {
+            history.push(`/search/${searchInput}`);
+            setSearchInput('');
         }
     };
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -78,11 +147,16 @@ exports.App = (props) => {
             react_1.default.createElement(Toolbar_1.default, null,
                 react_1.default.createElement(IconButton_1.default, { color: "inherit", "aria-label": "open drawer", edge: "start", onClick: handleDrawerToggle, className: classes.menuButton },
                     react_1.default.createElement(Menu_1.default, null)),
-                react_1.default.createElement(react_router_dom_1.Link, { to: "/" },
-                    react_1.default.createElement(Typography_1.default, { variant: "h6", className: classes.menuTitle }, "MoviesApp")),
-                react_1.default.createElement("div", { className: classes.pushRight },
-                    react_1.default.createElement(MenuTop_1.MenuTop, null)))),
-        react_1.default.createElement("nav", { className: classes.drawer, "aria-label": "mailbox folders" },
+                react_1.default.createElement(Typography_1.default, { className: classes.title, variant: "h6", noWrap: true },
+                    react_1.default.createElement(react_router_dom_1.Link, { to: "/", className: classes.menuItem }, "MoviesApp")),
+                react_1.default.createElement("div", { className: classes.search },
+                    react_1.default.createElement(InputBase_1.default, { value: searchInput, onKeyDown: handleEnter, onChange: (event) => (setSearchInput(event.target.value)), placeholder: "Search\u2026", classes: {
+                            root: classes.inputRoot,
+                            input: classes.inputInput
+                        }, inputProps: { 'aria-label': 'search' } })),
+                react_1.default.createElement(IconButton_1.default, { edge: "end", "aria-label": "search", onClick: handleSearchClick, color: "inherit" },
+                    react_1.default.createElement(Search_1.default, null)))),
+        react_1.default.createElement("nav", { className: classes.drawer, "aria-label": "sidebar menu" },
             react_1.default.createElement(Hidden_1.default, { smUp: true, implementation: "css" },
                 react_1.default.createElement(Drawer_1.default, { container: container, variant: "temporary", anchor: theme.direction === 'rtl' ? 'right' : 'left', open: mobileOpen, onClose: handleDrawerToggle, classes: {
                         paper: classes.drawerPaper
