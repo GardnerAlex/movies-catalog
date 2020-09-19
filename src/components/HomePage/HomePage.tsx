@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { Routes } from '../../Routes/Routes';
+import { routes } from '../../routes';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -63,7 +63,7 @@ export const HomePage = () => {
   const classes = useStyles();
 
   const contentMain: any = [];
-  Routes.forEach((item) => {
+  routes.forEach((item) => {
     // console.log('item path', item.path);
     if (item.toHomePage === true && item.path !== '/') {
       contentMain.push(

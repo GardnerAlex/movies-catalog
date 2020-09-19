@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -9,7 +8,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
 
 const distFolder = 'build';
-const src = 'src';
 
 // development webpack configuration.
 module.exports = {
@@ -82,10 +80,10 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, distFolder),
     compress: true,
-    host: 'localhost',
+    host: '127.0.0.1',
     port: 9090,
     writeToDisk: true,
-    disableHostCheck: true // That solved it
+    disableHostCheck: true
   },
   mode: devMode ? 'development' : 'production',
   devtool: devMode ? 'source-map' : false

@@ -4,10 +4,10 @@ import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 import TheatersSharpIcon from '@material-ui/icons/TheatersSharp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import { MoviesContainer } from '../components/MoviesContainer/MoviesContainer';
-import { HomePage } from '../components/HomePage/HomePage';
+import { MoviesContainer } from '../components/MoviesContainer';
+import { HomePage } from '../components/HomePage';
 
-export const Routes = [
+export const routes = [
   {
     path: '/',
     urlPath: '/',
@@ -92,12 +92,6 @@ export const Routes = [
     sidebarName: 'Search',
     component: MoviesContainer
   },
-  // {
-  //   path: '/genres/:genreName/:genreId',
-  //   toMenu: false,
-  //   sidebarName: 'genresList',
-  //   component: GenreMoviesList
-  // },
   {
     path: '/moviedetails/:movieId',
     toMenu: false,

@@ -9,7 +9,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import MovieFilterIcon from '@material-ui/icons/MovieFilter';
 import { Collapse, ListSubheader } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { Routes } from '../../Routes/Routes';
+import { routes } from '../../routes';
 import { genresObj } from '../../api/apiDefaults';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,7 +33,7 @@ export const DrawerMenu = (props: {closeHandler: (event: React.MouseEvent<HTMLDi
   const [open, setOpen] = useState(false);
   const menuList: ReactNode[] = [];
   const genresList: ReactNode[] = [];
-  Routes.forEach((item, index): void => {
+  routes.forEach((item, index): void => {
     if (item.toMenu === true) {
       menuList.push(
         // eslint-disable-next-line react/no-array-index-key

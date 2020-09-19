@@ -21,13 +21,12 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,
-    // backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(8),
-    padding: theme.spacing(6, 0),
-  },
+    padding: theme.spacing(6, 0)
+  }
 }));
 
-export function Footer(props) {
+export function Footer(props: { description: string, title: string}) {
   const classes = useStyles();
   const { description, title } = props;
 

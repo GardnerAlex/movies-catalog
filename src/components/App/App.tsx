@@ -14,9 +14,9 @@ import Grid from '@material-ui/core/Grid';
 import { Link, Route, Switch, useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Routes } from '../../Routes/Routes';
+import { DrawerMenu } from '../DrawerMenu';
+import { routes } from '../../routes';
 import { Footer } from '../Footer';
-import { DrawerMenu } from '../DrawerMenu/DrawerMenu';
 
 const drawerWidth = 220;
 const breakPoint = 'md';
@@ -116,9 +116,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const App = (props: { window: any; }) => {
+export const App = () => {
   const history = useHistory();
-  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -143,14 +142,13 @@ export const App = (props: { window: any; }) => {
   };
 
   const handleSearchClick = () => {
-    console.log('handleSearchClick');
     if (searchInput !== '') {
       history.push(`/search/${searchInput}`);
       setSearchInput('');
     }
   };
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  // const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className={classes.root}>
@@ -168,7 +166,7 @@ export const App = (props: { window: any; }) => {
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/" className={classes.menuItem}>
-              MoviesApp
+              MoviesApp2
             </Link>
           </Typography>
           <div className={classes.search}>
@@ -198,7 +196,7 @@ export const App = (props: { window: any; }) => {
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
-            container={container}
+            // container={container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
@@ -231,7 +229,7 @@ export const App = (props: { window: any; }) => {
           <Grid container className={classes.root} spacing={3}>
             <Grid item xs={12}>
               <Switch>
-                {Routes.map((route: any) => (
+                {routes.map((route: any) => (
                   <Route
                     exact
                     path={route.path}

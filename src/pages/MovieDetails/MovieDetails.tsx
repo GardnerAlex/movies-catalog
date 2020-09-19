@@ -5,13 +5,13 @@ import { Rating } from '@material-ui/lab';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
-import { Container, IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import Grid from '@material-ui/core/Grid';
-import { apiSettings, genresObj } from '../../api/apiDefaults';
-import { ImoviesData } from '../../interfaces/interfaces';
+import { apiSettings } from '../../api';
+import { ImoviesData } from '../../interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

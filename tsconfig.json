@@ -18,5 +18,6 @@
     "src/services/*.ts",
     "src/api/*.ts"
   ],
+  "exclude": ["node_modules"],
   "baseUrl": "."
 }

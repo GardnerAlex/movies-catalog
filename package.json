@@ -48,6 +48,7 @@
     "@types/jest": "^26.0.13",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/parser": "^4.1.1",
     "awesome-typescript-loader": "^5.2.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
@@ -57,6 +58,7 @@
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-react": "^1.1.7",
     "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
@@ -85,10 +87,7 @@
     "compile": "tsc -w --jsx react",
     "start": "npx webpack-dev-server --mode development --content-base=build --history-api-fallback",
     "build": "NODE_ENV=production webpack -p",
-    "lint": "yarn lint:js && yarn lint:scss",
-    "lint:js": "npx eslint --ext js,jsx ./src --fix",
-    "lint:scss": "npx stylelint './src/styles/*.scss' './src/components/**/*.scss' --fix",
-    "test": "react-scripts test"
+    "lint:ts": "npx eslint --ext ts,tsx ./src --fix"
   },
   "author": "AlexGArdner"
 }

@@ -2,15 +2,15 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { CircularProgress, Container, Divider } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Pagination } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
-import { IMovieApiResponse, ImoviesData } from '../../interfaces/interfaces';
-import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api/api';
-import { MovieDetails } from '../../pages/MovieDetails/MovieDetails';
-import { Movie } from '../../pages/Movie/Movie';
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { IMovieApiResponse, ImoviesData } from '../../interfaces';
+import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api';
+import { MovieDetails } from '../../pages/MovieDetails';
+import { Movie } from '../../pages/Movie';
 
 const queryString = require('query-string');
 

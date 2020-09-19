@@ -9,22 +9,6 @@
       "jsx": true
     }
   },
-  "settings": {
-    "import/resolver": {
-      "alias": [
-        [
-          "@nrei/styles",
-          "./src/styles"
-        ],
-        [
-          "@nrei/components",
-          "./src/components",
-          "./src/api",
-          "./src/interfaces"
-        ]
-      ]
-    }
-  },
   "rules": {
     "react/jsx-uses-react": 1,
     "react/jsx-props-no-spreading": 0,
@@ -82,5 +66,17 @@
   "env": {
     "es6": true,
     "browser": true
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      // use <root>/tsconfig.json
+      "typescript": {
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "project": "tsconfig.json"
+      }
+    }
   }
 }

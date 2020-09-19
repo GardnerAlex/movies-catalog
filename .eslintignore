@@ -1,1 +1,5 @@
 *.scss
+node_modules
+dist
+*.js
+*.jsx

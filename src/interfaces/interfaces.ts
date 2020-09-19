@@ -1,5 +1,4 @@
-import {useState} from "react";
-import {IconButtonProps} from "@material-ui/core";
+import { IconButtonProps } from '@material-ui/core';
 
 export interface ImoviesData {
     "popularity": number;

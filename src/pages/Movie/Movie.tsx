@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { apiSettings, genresObj } from '../../api/apiDefaults';
-import { ImoviesData } from '../../interfaces/interfaces';
+import { ImoviesData } from '../../interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
