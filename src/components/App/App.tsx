@@ -148,8 +148,6 @@ export const App = () => {
     }
   };
 
-  // const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -166,7 +164,7 @@ export const App = () => {
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/" className={classes.menuItem}>
-              MoviesApp2
+              MoviesApp
             </Link>
           </Typography>
           <div className={classes.search}>
@@ -229,7 +227,7 @@ export const App = () => {
           <Grid container className={classes.root} spacing={3}>
             <Grid item xs={12}>
               <Switch>
-                {routes.map((route: any) => (
+                {routes.map((route) => (
                   <Route
                     exact
                     path={route.path}

@@ -36,33 +36,29 @@ export const DrawerMenu = (props: {closeHandler: (event: React.MouseEvent<HTMLDi
   routes.forEach((item, index): void => {
     if (item.toMenu === true) {
       menuList.push(
-        // eslint-disable-next-line react/no-array-index-key
-        <ListItem button key={index + 1000} onClick={props.closeHandler}>
-          <NavLink to={item.urlPath} key={item.sidebarName}>
+        <NavLink to={item.path} key={item.sidebarName} className={classes.menuItem}>
+          {/* eslint-disable-next-line react/no-array-index-key */}
+          <ListItem button key={index + 1000} onClick={props.closeHandler}>
             <ListItemIcon>
               <item.icon fontSize="small" />
             </ListItemIcon>
-          </NavLink>
-          <NavLink to={item.urlPath} key={`${item.sidebarName}_l2`} className={classes.menuItem}>
             <ListItemText primary={item.sidebarName} />
-          </NavLink>
-        </ListItem>
+          </ListItem>
+        </NavLink>
       );
     }
   });
   Object.keys(genresObj).forEach((genresItem, index) => {
     genresList.push(
-      // eslint-disable-next-line react/no-array-index-key
-      <ListItem button className={classes.nested} key={index + 100000} onClick={props.closeHandler}>
-        <NavLink className={classes.menuItem} to={`/genres/${genresObj[genresItem].charAt(0).toLowerCase()}${genresObj[genresItem].slice(1)}`} key={genresItem}>
+      <NavLink className={classes.menuItem} to={`/genres/${genresObj[genresItem].charAt(0).toLowerCase()}${genresObj[genresItem].slice(1)}`} key={genresItem}>
+        {/* eslint-disable-next-line react/no-array-index-key */}
+        <ListItem button className={classes.nested} key={index + 100000} onClick={props.closeHandler}>
           <ListItemIcon>
             <MovieFilterIcon fontSize="small" />
           </ListItemIcon>
-        </NavLink>
-        <NavLink className={classes.menuItem} to={`/genres/${genresObj[genresItem].charAt(0).toLowerCase()}${genresObj[genresItem].slice(1)}`} key={`${genresItem}_l2`}>
           <ListItemText primary={genresObj[genresItem]} />
-        </NavLink>
-      </ListItem>
+        </ListItem>
+      </NavLink>
     );
   });
 

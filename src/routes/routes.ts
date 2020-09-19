@@ -6,11 +6,11 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { MoviesContainer } from '../components/MoviesContainer';
 import { HomePage } from '../components/HomePage';
+import { siteNav } from '../constants';
 
 export const routes = [
   {
     path: '/',
-    urlPath: '/',
     toMenu: true,
     toHomePage: false,
     icon: HomeTwoToneIcon,
@@ -18,8 +18,7 @@ export const routes = [
     component: HomePage
   },
   {
-    path: '/trending',
-    urlPath: '/trending',
+    path: `/${siteNav.trending}`,
     toMenu: true,
     toHomePage: true,
     description: 'This week most interesting movies to watch',
@@ -29,8 +28,7 @@ export const routes = [
     component: MoviesContainer
   },
   {
-    path: '/nowplaying',
-    urlPath: '/nowplaying',
+    path: `/${siteNav.nowplaying}`,
     toMenu: true,
     toHomePage: true,
     description: 'Movies, which you can now watch in the movie theatre',
@@ -40,8 +38,7 @@ export const routes = [
     component: MoviesContainer
   },
   {
-    path: '/popular',
-    urlPath: '/popular',
+    path: `/${siteNav.popular}`,
     description: 'Popular movies according to their rating and users opinions',
     image: 'http://image.tmdb.org/t/p/w300/zzWGRw277MNoCs3zhyG3YmYQsXv.jpg',
     toMenu: true,
@@ -50,17 +47,8 @@ export const routes = [
     sidebarName: 'Popular',
     component: MoviesContainer
   },
-  // {
-  //   path: '/movie/:id/:movieTitle',
-  //   urlPath: '',
-  //   toMenu: false,
-  //   toHomePage: false,
-  //   sidebarName: 'Movie',
-  //   component: MoviesContainer
-  // },
   {
-    path: '/favorites',
-    urlPath: '/favorites',
+    path: `/${siteNav.favorites}`,
     toMenu: true,
     toHomePage: false,
     icon: FavoriteIcon,
@@ -68,8 +56,7 @@ export const routes = [
     component: MoviesContainer
   },
   {
-    path: '/watchlater',
-    urlPath: '/watchlater',
+    path: `/${siteNav.watchlater}`,
     toMenu: true,
     toHomePage: false,
     icon: BookmarkBorderIcon,
@@ -77,23 +64,21 @@ export const routes = [
     component: MoviesContainer
   },
   {
-    path: '/genres/:genreName',
-    urlPath: '',
+    path: `/${siteNav.genres}/:genreName`,
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Genres',
     component: MoviesContainer
   },
   {
-    path: '/search/:query',
-    urlPath: '',
+    path: `/${siteNav.search}/:query`,
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Search',
     component: MoviesContainer
   },
   {
-    path: '/moviedetails/:movieId',
+    path: `/${siteNav.moviedetails}/:movieId`,
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Movie',

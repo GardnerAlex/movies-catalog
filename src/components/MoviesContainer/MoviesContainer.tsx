@@ -1,16 +1,15 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CircularProgress, Container, Divider } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Pagination } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Paginator } from '../Paginator';
 import { IMovieApiResponse, ImoviesData } from '../../interfaces';
 import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api';
 import { MovieDetails } from '../../pages/MovieDetails';
 import { Movie } from '../../pages/Movie';
+import { siteNav } from '../../constants';
 
 const queryString = require('query-string');
 
@@ -39,31 +38,28 @@ const useStyles = makeStyles((theme: Theme) =>
 export const MoviesContainer = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
   const classes = useStyles();
   const history = useHistory();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const initMoviesData: IMovieApiResponse = { page: 0, results: [], total_pages: 0, total_results: 0 };
-  const [moviesData, setMoviesData] = useState<IMovieApiResponse | ImoviesData>(initMoviesData);
-  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage('favorites'));
-  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage('watchlater'));
+  const [moviesData, setMoviesData] = useState<IMovieApiResponse>(initMoviesData);
+  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage(siteNav.favorites));
+  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage(siteNav.watchlater));
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>(null);
-  const [pageNumPagination, setPageNumPagination] = useState<number>(1);
   const location = match.location.pathname.split('/')[1];
   const numCheck = new RegExp('^[0-9]+$');
   console.log('match', match);
-  console.log('history.location', history.location);
+  console.log('history', history);
   const myName = 'MoviesList';
   let pageTitle = 'Main page';
   if (location !== undefined) {
     // page title selector
     pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
-    if (location === 'genres') {
+    if (location === siteNav.genres) {
       pageTitle = `${match.match.params.genreName.charAt(0).toUpperCase()}${match.match.params.genreName.slice(1)} Movies`;
     }
-    if (location === 'watchlater') {
+    if (location === siteNav.watchlater) {
       pageTitle = 'Movies to watch later';
     }
-    if (location === 'moviedetails') {
+    if (location === siteNav.moviedetails) {
       pageTitle = 'Movie details:';
     }
   }
@@ -73,9 +69,6 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
   if (numCheck.test(pageNumParsed) === true) {
     // todo define for what req types pagination is allowed
     pageNum = Number.parseInt(pageNumParsed, 10);
-    if (pageNum !== pageNumPagination) {
-      setPageNumPagination(pageNum);
-    }
   }
 
   useEffect(() => {
@@ -95,28 +88,9 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
         setLoading(false);
       });
     return () => {
-      setPageNumPagination(1);
       setErrorMessage(null);
     };
   }, [history.location]);
-
-  const handlePageChange = (event: any, value: number) => {
-    const query = queryString.parse(match.location.search);
-    query.page = value;
-    history.push(`${match.location.pathname}?${queryString.stringify(query)}`);
-  };
-
-  let pagination = null;
-
-  if ('total_pages' in moviesData && moviesData.total_pages !== undefined && moviesData.total_pages > 0) {
-    pagination = (
-      <Grid container justify="center" spacing={2}>
-        <Grid className={classes.paper} item>
-          <Pagination count={moviesData.total_pages} size={isMobile ? 'small' : 'large'} page={pageNumPagination} color="primary" onChange={handlePageChange} />
-        </Grid>
-      </Grid>
-    );
-  }
 
   const addToLocalStorageHandler = (inputParams: { queryType: string, movieDataToAdd: ImoviesData }) => {
     if (inputParams.queryType === 'favorites') {
@@ -200,6 +174,7 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
     contentToDisplay = noMovies;
   }
 
+  // @ts-ignore
   return (
     <>
       <Container className={classes.title}>
@@ -211,7 +186,7 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
       <Divider className={classes.title} />
       {errorMessage && <span>{errorMessage}</span>}
       {!loading && contentToDisplay}
-      {!loading && pagination}
+      {!loading && <Paginator moviesData={moviesData} />}
     </>
   );
 };
