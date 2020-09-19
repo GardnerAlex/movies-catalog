@@ -23,8 +23,8 @@ const queryUrl = (params) => {
         return '';
     };
     const queryTemplate = {
-        movie_details: {
-            url: `${BASE_MOVIE_PATH}${params.movieId}?api_key=${API_KEY}`
+        moviedetails: {
+            url: `${BASE_MOVIE_PATH}${params.movieId ? params.movieId.split('_')[0] : null}?api_key=${API_KEY}`
         },
         popular: {
             url: `${POPULAR_API_URL}?api_key=${API_KEY}&page=${params.pageId ? params.pageId : 1}`

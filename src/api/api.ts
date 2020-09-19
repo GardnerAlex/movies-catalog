@@ -25,9 +25,9 @@ const queryUrl = (params: IlocalApiRequest) => {
     return '';
   };
 
-  const queryTemplate: {movie_details: {url: string;}; search: {url: string;}; popular: {url: string;}; trending: {url: string;}; nowplaying: {url: string;}, genres: {url: string;}} = {
-    movie_details: {
-      url: `${BASE_MOVIE_PATH}${params.movieId}?api_key=${API_KEY}`
+  const queryTemplate: {moviedetails: {url: string;}; search: {url: string;}; popular: {url: string;}; trending: {url: string;}; nowplaying: {url: string;}, genres: {url: string;}} = {
+    moviedetails: {
+      url: `${BASE_MOVIE_PATH}${params.movieId ? params.movieId.split('_')[0] : null}?api_key=${API_KEY}`
     },
     popular: {
       url: `${POPULAR_API_URL}?api_key=${API_KEY}&page=${params.pageId ? params.pageId : 1}`
@@ -50,7 +50,7 @@ const queryUrl = (params: IlocalApiRequest) => {
   return resUrl;
 };
 
-export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiResponse> => {
+export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiResponse | ImoviesData> => {
   console.log('fetchMoviesDetails input', inputParams);
   const url = queryUrl(inputParams);
   console.log('fetchMoviesDetails url', url);

@@ -210,7 +210,7 @@ export const App = (props: { window: any; }) => {
               keepMounted: true // Better open performance on mobile.
             }}
           >
-            <DrawerMenu isMobile={isMobile} closeHandler={handleDrawerMenuItemCLick} />
+            <DrawerMenu closeHandler={handleDrawerMenuItemCLick} />
           </Drawer>
         </Hidden>
         <Hidden smDown implementation="css">
@@ -221,7 +221,7 @@ export const App = (props: { window: any; }) => {
             variant="permanent"
             open={mobileOpen}
           >
-            <DrawerMenu isMobile={isMobile} closeHandler={handleDrawerMenuItemCLick} />
+            <DrawerMenu closeHandler={handleDrawerMenuItemCLick} />
           </Drawer>
         </Hidden>
       </nav>

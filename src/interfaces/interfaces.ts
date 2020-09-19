@@ -1,3 +1,6 @@
+import {useState} from "react";
+import {IconButtonProps} from "@material-ui/core";
+
 export interface ImoviesData {
     "popularity": number;
     "vote_count": number;
@@ -28,7 +31,7 @@ export interface IlocalApiRequest {
     queryType: string;
     query?: string;
     pageId?: number;
-    movieId?: number | string;
+    movieId?: string;
     genreName?: string;
 }
 
@@ -40,4 +43,11 @@ export interface IApiResponse {
     page?: number;
     total_pages?: number;
     total_results?: number;
+}
+
+// useState<IconButtonProps>({ color: favoritesState.color, text: favoritesState.text }); // 'primary' means Not in Favorites
+
+export interface IconsInfo {
+    color: IconButtonProps;
+    text: string
 }

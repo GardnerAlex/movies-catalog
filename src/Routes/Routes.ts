@@ -4,8 +4,7 @@ import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 import TheatersSharpIcon from '@material-ui/icons/TheatersSharp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import { MoviesList } from '../components/MoviesList/MoviesList';
-import { MovieDetails } from '../components/MovieDetails/MovieDetails';
+import { MoviesContainer } from '../components/MoviesContainer/MoviesContainer';
 import { HomePage } from '../components/HomePage/HomePage';
 
 export const Routes = [
@@ -27,7 +26,7 @@ export const Routes = [
     image: 'http://image.tmdb.org/t/p/w300/pq0JSpwyT2URytdFG0euztQPAyR.jpg',
     icon: TrendingUpSharpIcon,
     sidebarName: 'Trending',
-    component: MoviesList
+    component: MoviesContainer
   },
   {
     path: '/nowplaying',
@@ -38,7 +37,7 @@ export const Routes = [
     image: 'http://image.tmdb.org/t/p/w300/r5srC0cqU36n38azFnCyReEksiR.jpg',
     icon: FiberNewSharpIcon,
     sidebarName: 'Now playing',
-    component: MoviesList
+    component: MoviesContainer
   },
   {
     path: '/popular',
@@ -49,16 +48,16 @@ export const Routes = [
     toHomePage: true,
     icon: TheatersSharpIcon,
     sidebarName: 'Popular',
-    component: MoviesList
+    component: MoviesContainer
   },
-  {
-    path: '/movie/:id/:movieTitle',
-    urlPath: '',
-    toMenu: false,
-    toHomePage: false,
-    sidebarName: 'Movie',
-    component: MovieDetails
-  },
+  // {
+  //   path: '/movie/:id/:movieTitle',
+  //   urlPath: '',
+  //   toMenu: false,
+  //   toHomePage: false,
+  //   sidebarName: 'Movie',
+  //   component: MoviesContainer
+  // },
   {
     path: '/favorites',
     urlPath: '/favorites',
@@ -66,7 +65,7 @@ export const Routes = [
     toHomePage: false,
     icon: FavoriteIcon,
     sidebarName: 'Favorites',
-    component: MoviesList
+    component: MoviesContainer
   },
   {
     path: '/watchlater',
@@ -75,7 +74,7 @@ export const Routes = [
     toHomePage: false,
     icon: BookmarkBorderIcon,
     sidebarName: 'Watch later',
-    component: MoviesList
+    component: MoviesContainer
   },
   {
     path: '/genres/:genreName',
@@ -83,7 +82,7 @@ export const Routes = [
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Genres',
-    component: MoviesList
+    component: MoviesContainer
   },
   {
     path: '/search/:query',
@@ -91,7 +90,7 @@ export const Routes = [
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Search',
-    component: MoviesList
+    component: MoviesContainer
   },
   // {
   //   path: '/genres/:genreName/:genreId',
@@ -100,10 +99,10 @@ export const Routes = [
   //   component: GenreMoviesList
   // },
   {
-    path: '/movieDetails/:id',
+    path: '/moviedetails/:movieId',
     toMenu: false,
     toHomePage: false,
     sidebarName: 'Movie',
-    component: MovieDetails
+    component: MoviesContainer
   }
 ];

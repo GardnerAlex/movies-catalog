@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import {CircularProgress, Container, Divider} from '@material-ui/core';
+import { CircularProgress, Container, Divider } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Pagination } from '@material-ui/lab';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { IMovieApiResponse, ImoviesData } from '../../interfaces/interfaces';
 import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api/api';
-import { Movie } from '../Movie/Movie';
+import { MovieDetails } from '../../pages/MovieDetails/MovieDetails';
+import { Movie } from '../../pages/Movie/Movie';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const queryString = require('query-string');
 
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap'
     },
     paper: {
+      marginTop: theme.spacing(2),
       padding: theme.spacing(2),
       textAlign: 'left',
       color: theme.palette.text.secondary
@@ -28,15 +31,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(2)
     }
   })
 );
 
-export const MoviesList = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
+export const MoviesContainer = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
   const classes = useStyles();
   const history = useHistory();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const initMoviesData: IMovieApiResponse = { page: 0, results: [], total_pages: 0, total_results: 0 };
-  const [moviesData, setMoviesData] = useState<IMovieApiResponse>(initMoviesData);
+  const [moviesData, setMoviesData] = useState<IMovieApiResponse | ImoviesData>(initMoviesData);
   const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage('favorites'));
   const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage('watchlater'));
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,12 +55,16 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
   const myName = 'MoviesList';
   let pageTitle = 'Main page';
   if (location !== undefined) {
+    // page title selector
     pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
     if (location === 'genres') {
       pageTitle = `${match.match.params.genreName.charAt(0).toUpperCase()}${match.match.params.genreName.slice(1)} Movies`;
     }
     if (location === 'watchlater') {
       pageTitle = 'Movies to watch later';
+    }
+    if (location === 'moviedetails') {
+      pageTitle = 'Movie details:';
     }
   }
   // queryString is priority on pagination. If we directly hit to some page, we will set pagination number from query
@@ -75,7 +85,9 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     processApiRequest({ queryType: location, pageId: pageNum, ...match.match.params })
       .then(res => {
         console.log(`${location} Axios resp `, res);
-        setMoviesData(res.data);
+        if ('data' in res) {
+          setMoviesData(res.data);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -94,16 +106,17 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     history.push(`${match.location.pathname}?${queryString.stringify(query)}`);
   };
 
-  const pagination = () => {
-    if (moviesData.total_pages !== undefined && moviesData.total_pages > 0) {
-      return (
-        <Container maxWidth="sm">
-          <Pagination count={moviesData.total_pages} page={pageNumPagination} color="primary" onChange={handlePageChange} />
-        </Container>
-      );
-    }
-    return null;
-  };
+  let pagination = null;
+
+  if ('total_pages' in moviesData && moviesData.total_pages !== undefined && moviesData.total_pages > 0) {
+    pagination = (
+      <Grid container justify="center" spacing={2}>
+        <Grid className={classes.paper} item>
+          <Pagination count={moviesData.total_pages} size={isMobile ? 'small' : 'large'} page={pageNumPagination} color="primary" onChange={handlePageChange} />
+        </Grid>
+      </Grid>
+    );
+  }
 
   const addToLocalStorageHandler = (inputParams: { queryType: string, movieDataToAdd: ImoviesData }) => {
     if (inputParams.queryType === 'favorites') {
@@ -125,14 +138,6 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     }
   };
 
-  const noMovies = () => (
-    <Container maxWidth="lg">
-      <Typography variant="h4">
-        No data to show here ... ;((
-      </Typography>
-    </Container>
-  );
-
   const getIconColor = (iconType: string, id: number): string => {
     if (iconType === 'favorites') {
       if (favoritesData.results.findIndex(item => item.id === id) !== -1) {
@@ -149,34 +154,64 @@ export const MoviesList = (match: { location: { search: any; pathname: string; }
     return 'primary';
   };
 
+  const noMovies = (
+    <Container maxWidth="lg">
+      <Typography variant="h4">
+        No data to show here ... ;((
+      </Typography>
+    </Container>
+  );
+
+  let contentToDisplay;
+
+  if (moviesData) {
+    // select which content to display based on location
+    if (location === 'moviedetails') {
+      if ('id' in moviesData) {
+        contentToDisplay = (
+          <MovieDetails
+            movie={moviesData}
+            addToLocalStorageHandler={addToLocalStorageHandler}
+            deleteFromLocalStorageHandler={deleteFromLocalStorageHandler}
+            watchLaterState={getIconColor('watchlater', moviesData.id)}
+            favoritesState={getIconColor('favorites', moviesData.id)}
+          />
+        );
+      }
+    }
+    if ('results' in moviesData && moviesData.results.length > 0) {
+      contentToDisplay = (
+        <Grid container justify="center" spacing={2}>
+          {moviesData.results.map((movie) => (
+            <Grid className={classes.paper} key={`${movie.poster_path}${movie.id}${movie.title}`} item>
+              <Movie
+                movie={movie}
+                addToLocalStorageHandler={addToLocalStorageHandler}
+                deleteFromLocalStorageHandler={deleteFromLocalStorageHandler}
+                favoritesState={getIconColor('favorites', movie.id)}
+                watchLaterState={getIconColor('watchlater', movie.id)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      );
+    }
+  } else {
+    contentToDisplay = noMovies;
+  }
+
   return (
     <>
-      {moviesData
-      && (
       <Container className={classes.title}>
         <Typography variant="h4" component="h1">
           {pageTitle}
         </Typography>
-        <Divider />
-      </Container>
-      )}
-      <Grid container justify="center" spacing={2}>
         {loading && <CircularProgress className={classes.progress} />}
-        {errorMessage && <span>{errorMessage}</span>}
-        {moviesData && moviesData.results.map((movie) => (
-          <Grid className={classes.paper} key={`${movie.poster_path}${movie.id}${movie.title}`} item>
-            <Movie
-              movie={movie}
-              addToLocalStorageHandler={addToLocalStorageHandler}
-              deleteFromLocalStorageHandler={deleteFromLocalStorageHandler}
-              favoritesState={getIconColor('favorites', movie.id)}
-              watchLaterState={getIconColor('watchlater', movie.id)}
-            />
-          </Grid>
-        ))}
-        {moviesData && !loading && pagination()}
-        {moviesData && !loading && moviesData.results.length === 0 && noMovies()}
-      </Grid>
+      </Container>
+      <Divider className={classes.title} />
+      {errorMessage && <span>{errorMessage}</span>}
+      {!loading && contentToDisplay}
+      {!loading && pagination}
     </>
   );
 };

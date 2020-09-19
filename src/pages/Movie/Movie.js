@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MovieDetails = void 0;
+exports.Movie = void 0;
 const react_1 = require("react");
 const react_router_dom_1 = require("react-router-dom");
 const styles_1 = require("@material-ui/core/styles");
@@ -36,30 +36,46 @@ const useStyles = styles_1.makeStyles((theme) => styles_1.createStyles({
     },
     rating: {}
 }));
-exports.MovieDetails = (props) => {
+exports.Movie = (props) => {
     const { movie, addToLocalStorageHandler, deleteFromLocalStorageHandler, watchLaterState, favoritesState } = props;
     const classes = useStyles();
+    const tooltipTexts = {
+        watchlater: {
+            primary: 'Add to Watch Later list',
+            secondary: 'Remove from Watch Later list'
+        },
+        favorites: {
+            primary: 'Add to Favorites list',
+            secondary: 'Remove from Favorites list'
+        }
+    };
     const [favorites, setFavorites] = react_1.useState({ color: favoritesState });
+    const [favoritesTooltipText, setFavoritesTooltipText] = react_1.useState(tooltipTexts.favorites[favoritesState]);
     const [watchLater, setWatchLater] = react_1.useState({ color: watchLaterState });
+    const [watchLaterTooltipText, setWatchLaterTooltipText] = react_1.useState(tooltipTexts.watchlater[watchLaterState]);
     const handleClick = (clickType) => {
         if (clickType === 'favorites') {
             if (favorites.color === 'primary') {
                 addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setFavorites({ color: 'secondary' });
+                setFavoritesTooltipText(tooltipTexts[clickType].secondary);
             }
             else {
                 deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setFavorites({ color: 'primary' });
+                setFavoritesTooltipText(tooltipTexts[clickType].primary);
             }
         }
         if (clickType === 'watchlater') {
             if (watchLater.color === 'primary') {
                 addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setWatchLater({ color: 'secondary' });
+                setWatchLaterTooltipText(tooltipTexts[clickType].secondary);
             }
             else {
                 deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
                 setWatchLater({ color: 'primary' });
+                setWatchLaterTooltipText(tooltipTexts[clickType].primary);
             }
         }
     };
@@ -70,14 +86,16 @@ exports.MovieDetails = (props) => {
             react_1.default.createElement(core_1.Tooltip, { title: "User rating" },
                 react_1.default.createElement("div", { "aria-label": "user rating", className: classes.rating },
                     react_1.default.createElement(lab_1.Rating, { size: "small", name: "half-rating-read", precision: 0.1, readOnly: true, value: movie.vote_average / 2 }))),
-            react_1.default.createElement(core_1.Tooltip, { title: "Add to Watch later list" },
+            react_1.default.createElement(core_1.Tooltip, { title: watchLaterTooltipText },
                 react_1.default.createElement(core_1.IconButton, { size: "small", "aria-label": "add to favorites", onClick: () => handleClick('watchlater'), color: watchLater.color },
                     react_1.default.createElement(BookmarkBorder_1.default, null))),
-            react_1.default.createElement(core_1.Tooltip, { title: "Add to Favorites list" },
+            react_1.default.createElement(core_1.Tooltip, { title: favoritesTooltipText },
                 react_1.default.createElement(core_1.IconButton, { size: "small", "aria-label": "add to Watch later list", onClick: () => handleClick('favorites'), color: favorites.color },
                     react_1.default.createElement(Favorite_1.default, null)))),
         react_1.default.createElement("div", { className: classes.textBox },
             react_1.default.createElement(Typography_1.default, { variant: "body1", component: "h3" }, movie.title),
-            react_1.default.createElement(Typography_1.default, { variant: "caption" }, `Genre: ${apiDefaults_1.genresObj[movie.genre_ids[0]]} | ${movie.release_date.slice(0, 4)}`))));
+            react_1.default.createElement(Typography_1.default, { variant: "caption" },
+                movie.genre_ids && movie.genre_ids.length > 0 && `Genre:${apiDefaults_1.genresObj[movie.genre_ids[0]]} | `,
+                `Year ${movie.release_date.slice(0, 4)}`))));
 };
-//# sourceMappingURL=MovieDetails.js.map
+//# sourceMappingURL=Movie.js.map

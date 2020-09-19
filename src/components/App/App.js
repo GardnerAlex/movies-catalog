@@ -164,12 +164,12 @@ exports.App = (props) => {
                     }, ModalProps: {
                         keepMounted: true
                     } },
-                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, { isMobile: isMobile, closeHandler: handleDrawerMenuItemCLick }))),
+                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, { closeHandler: handleDrawerMenuItemCLick }))),
             react_1.default.createElement(Hidden_1.default, { smDown: true, implementation: "css" },
                 react_1.default.createElement(Drawer_1.default, { classes: {
                         paper: classes.drawerPaper
                     }, variant: "permanent", open: mobileOpen },
-                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, { isMobile: isMobile, closeHandler: handleDrawerMenuItemCLick })))),
+                    react_1.default.createElement(DrawerMenu_1.DrawerMenu, { closeHandler: handleDrawerMenuItemCLick })))),
         react_1.default.createElement("main", { className: classes.content },
             react_1.default.createElement("div", { className: classes.toolbar }),
             react_1.default.createElement(Container_1.default, { maxWidth: "lg" },
