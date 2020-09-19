@@ -82,7 +82,7 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, distFolder),
     compress: true,
-    host: 'leo-vegas-test.com',
+    host: 'localhost',
     port: 9090,
     writeToDisk: true,
     disableHostCheck: true // That solved it
