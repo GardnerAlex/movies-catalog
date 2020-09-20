@@ -9,7 +9,7 @@ import { IMovieApiResponse, ImoviesData } from '../../interfaces';
 import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api';
 import { MovieDetails } from '../../pages/MovieDetails';
 import { Movie } from '../../pages/Movie';
-import { siteNav } from '../../constants';
+import { siteNav } from '../../config';
 
 const queryString = require('query-string');
 

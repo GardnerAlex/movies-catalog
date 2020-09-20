@@ -6,7 +6,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { MoviesContainer } from '../components/MoviesContainer';
 import { HomePage } from '../components/HomePage';
-import { siteNav } from '../constants';
+import { siteNav } from '../config';
 
 export const routes = [
   {
