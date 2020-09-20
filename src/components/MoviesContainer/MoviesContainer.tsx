@@ -5,11 +5,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
 import { Paginator } from '../Paginator';
-import { IMovieApiResponse, ImoviesData } from '../../interfaces';
-import { processApiRequest, addToLocalStorage, deleteFromLocalStorage, queryLocalStorage } from '../../api';
+import { IMovieApiResponse } from '../../interfaces';
+import { processApiRequest, queryLocalStorage } from '../../api';
 import { MovieDetails } from '../../pages/MovieDetails';
 import { Movie } from '../../pages/Movie';
-import { siteNav } from '../../config';
+import { siteNav, personalStorages } from '../../config';
 
 const queryString = require('query-string');
 
@@ -40,8 +40,8 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
   const history = useHistory();
   const initMoviesData: IMovieApiResponse = { page: 0, results: [], total_pages: 0, total_results: 0 };
   const [moviesData, setMoviesData] = useState<IMovieApiResponse>(initMoviesData);
-  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage(siteNav.favorites));
-  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage(siteNav.watchlater));
+  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage(personalStorages.favorites));
+  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage(personalStorages.watchLater));
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>(null);
   const location = match.location.pathname.split('/')[1];
@@ -50,13 +50,14 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
   console.log('history', history);
   const myName = 'MoviesList';
   let pageTitle = 'Main page';
+  // todo nove to separate component Title or etc
   if (location !== undefined) {
     // page title selector
     pageTitle = `${location.charAt(0).toUpperCase()}${location.slice(1)} Movies`;
     if (location === siteNav.genres) {
       pageTitle = `${match.match.params.genreName.charAt(0).toUpperCase()}${match.match.params.genreName.slice(1)} Movies`;
     }
-    if (location === siteNav.watchlater) {
+    if (location === siteNav.watchLater) {
       pageTitle = 'Movies to watch later';
     }
     if (location === siteNav.moviedetails) {
@@ -75,6 +76,8 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
     console.log(`UseEffect fired on page ${myName} `);
     setLoading(true);
     setMoviesData(initMoviesData);
+    setFavoritesData(queryLocalStorage(personalStorages.favorites));
+    setWatchLaterData(queryLocalStorage(personalStorages.watchLater));
     processApiRequest({ queryType: location, pageId: pageNum, ...match.match.params })
       .then(res => {
         console.log(`${location} Axios resp `, res);
@@ -92,42 +95,6 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
     };
   }, [history.location]);
 
-  const addToLocalStorageHandler = (inputParams: { queryType: string, movieDataToAdd: ImoviesData }) => {
-    if (inputParams.queryType === 'favorites') {
-      console.log('=====moviesList addToLocalStorageHandler ', inputParams.queryType);
-      setFavoritesData(addToLocalStorage(inputParams));
-    }
-    if (inputParams.queryType === 'watchlater') {
-      console.log('=====moviesList addToLocalStorageHandler ', inputParams.queryType);
-      setWatchLaterData(addToLocalStorage(inputParams));
-    }
-  };
-
-  const deleteFromLocalStorageHandler = (inputParams: { queryType: string, movieDataToAdd: ImoviesData }) => {
-    if (inputParams.queryType === 'favorites') {
-      setFavoritesData(deleteFromLocalStorage(inputParams));
-    }
-    if (inputParams.queryType === 'watchlater') {
-      setWatchLaterData(deleteFromLocalStorage(inputParams));
-    }
-  };
-
-  const getIconColor = (iconType: string, id: number): string => {
-    if (iconType === 'favorites') {
-      if (favoritesData.results.findIndex(item => item.id === id) !== -1) {
-        // console.log('favoritesData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
-        return 'secondary';
-      }
-    }
-    if (iconType === 'watchlater') {
-      if (watchLaterData.results.findIndex(item => item.id === id) !== -1) {
-        // console.log('watchLaterData.results.findIndex(item => item.id === movie.id)', favoritesData.results.findIndex(item => item.id === id));
-        return 'secondary';
-      }
-    }
-    return 'primary';
-  };
-
   const noMovies = (
     <Container maxWidth="lg">
       <Typography variant="h4">
@@ -137,18 +104,15 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
   );
 
   let contentToDisplay;
-
+  // todo replace with constants
   if (moviesData) {
-    // select which content to display based on location
     if (location === 'moviedetails') {
       if ('id' in moviesData) {
         contentToDisplay = (
           <MovieDetails
             movie={moviesData}
-            addToLocalStorageHandler={addToLocalStorageHandler}
-            deleteFromLocalStorageHandler={deleteFromLocalStorageHandler}
-            watchLaterState={getIconColor('watchlater', moviesData.id)}
-            favoritesState={getIconColor('favorites', moviesData.id)}
+            favoritesData={favoritesData}
+            watchLaterData={watchLaterData}
           />
         );
       }
@@ -160,10 +124,8 @@ export const MoviesContainer = (match: { location: { search: any; pathname: stri
             <Grid className={classes.paper} key={`${movie.poster_path}${movie.id}${movie.title}`} item>
               <Movie
                 movie={movie}
-                addToLocalStorageHandler={addToLocalStorageHandler}
-                deleteFromLocalStorageHandler={deleteFromLocalStorageHandler}
-                favoritesState={getIconColor('favorites', movie.id)}
-                watchLaterState={getIconColor('watchlater', movie.id)}
+                favoritesData={favoritesData}
+                watchLaterData={watchLaterData}
               />
             </Grid>
           ))}

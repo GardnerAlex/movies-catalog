@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { IApiResponse, IApiRespResults, IlocalApiRequest, ImoviesData } from '../interfaces';
 import { genresFromApi } from './apiDefaults';
+
 // import { stubRespFavorites } from './stubResponses';
 
 const API_KEY = 'd32dade5b7e3663be8be530290d660cc';

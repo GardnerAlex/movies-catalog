@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Rating } from '@material-ui/lab';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { apiSettings, genresObj } from '../../api/apiDefaults';
-import { ImoviesData } from '../../interfaces';
+import { IMovieApiResponse, ImoviesData } from '../../interfaces';
+import { PersonalizedListPlaceHolder } from '../../components/PersonalizedListPlaceholder';
+import { personalStorages } from '../../config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,55 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Movie = (props: {movie: ImoviesData, addToLocalStorageHandler: Function,
-  deleteFromLocalStorageHandler: Function, watchLaterState: any, favoritesState: string}) => {
-  // const history = useHistory();
-  const { movie, addToLocalStorageHandler, deleteFromLocalStorageHandler, watchLaterState, favoritesState } = props;
+export const Movie = (props: {movie: ImoviesData, watchLaterData: IMovieApiResponse, favoritesData: IMovieApiResponse}) => {
+  const { movie, favoritesData, watchLaterData } = props;
   const classes = useStyles();
-  // @ts-ignore
-  const tooltipTexts = {
-    watchlater: {
-      primary: 'Add to Watch Later list',
-      secondary: 'Remove from Watch Later list'
-    },
-    favorites: {
-      primary: 'Add to Favorites list',
-      secondary: 'Remove from Favorites list'
-    }
-  };
-  // @ts-ignore
-  const [favorites, setFavorites] = useState<IconButtonProps>({ color: favoritesState }); // 'primary' means Not in Favorites
-  // @ts-ignore
-  const [favoritesTooltipText, setFavoritesTooltipText] = useState<string>(tooltipTexts.favorites[favoritesState]); // 'primary' means Not in Favorites
-  const [watchLater, setWatchLater] = useState<IconButtonProps>({ color: watchLaterState }); // 'primary' means Not in Favorites
-  // @ts-ignore
-  const [watchLaterTooltipText, setWatchLaterTooltipText] = useState<string>(tooltipTexts.watchlater[watchLaterState]); // 'primary' means Not in Favorites
-
-  // todo refactor to move logic to parent component
-  const handleClick = (clickType: string) => {
-    if (clickType === 'favorites') {
-      if (favorites.color === 'primary') {
-        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
-        setFavorites({ color: 'secondary' });
-        setFavoritesTooltipText(tooltipTexts[clickType].secondary);
-      } else {
-        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
-        setFavorites({ color: 'primary' });
-        setFavoritesTooltipText(tooltipTexts[clickType].primary);
-      }
-    }
-    if (clickType === 'watchlater') {
-      if (watchLater.color === 'primary') {
-        addToLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
-        setWatchLater({ color: 'secondary' });
-        setWatchLaterTooltipText(tooltipTexts[clickType].secondary);
-      } else {
-        deleteFromLocalStorageHandler({ queryType: clickType, movieDataToAdd: movie });
-        setWatchLater({ color: 'primary' });
-        setWatchLaterTooltipText(tooltipTexts[clickType].primary);
-      }
-    }
-  };
 
   return (
     <Card className={classes.root}>
@@ -105,26 +61,8 @@ export const Movie = (props: {movie: ImoviesData, addToLocalStorageHandler: Func
             <Rating size="small" name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
           </div>
         </Tooltip>
-        <Tooltip title={watchLaterTooltipText}>
-          <IconButton
-            size="small"
-            aria-label="add to favorites"
-            onClick={() => handleClick('watchlater')}
-            color={watchLater.color}
-          >
-            <BookmarkBorderIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={favoritesTooltipText}>
-          <IconButton
-            size="small"
-            aria-label="add to Watch later list"
-            onClick={() => handleClick('favorites')}
-            color={favorites.color}
-          >
-            <FavoriteIcon />
-          </IconButton>
-        </Tooltip>
+        <PersonalizedListPlaceHolder icon={BookmarkBorderIcon} personalStorageType={personalStorages.watchLater} movie={movie} personalStorageData={watchLaterData} />
+        <PersonalizedListPlaceHolder icon={FavoriteIcon} personalStorageType={personalStorages.favorites} movie={movie} personalStorageData={favoritesData} />
       </CardActions>
       <div className={classes.textBox}>
         <Typography variant="body1" component="h3">

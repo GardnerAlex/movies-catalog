@@ -34,6 +34,11 @@ export interface IlocalApiRequest {
     genreName?: string;
 }
 
+// export interface IAddToDbRequest {
+//     movieDataToAdd: ImoviesData;
+//     queryType: PersonalStorages;
+// }
+
 export interface IApiRespResults {
     results: Array<ImoviesData>
 }

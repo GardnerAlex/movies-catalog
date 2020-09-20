@@ -7,8 +7,9 @@ import Container from '@material-ui/core/Container';
 import { Navigation } from '../Navigation';
 import { routes } from '../../routes';
 import { Footer } from '../Footer';
+import { stylesConfig } from '../../config';
 
-const breakPoint = 'md';
+const { drawerBreakPoint } = stylesConfig;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    [theme.breakpoints.down(breakPoint)]:
+    [theme.breakpoints.down(drawerBreakPoint)]:
     {
       padding: theme.spacing(1)
 

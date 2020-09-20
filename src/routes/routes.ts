@@ -56,7 +56,7 @@ export const routes = [
     component: MoviesContainer
   },
   {
-    path: `/${siteNav.watchlater}`,
+    path: `/${siteNav.watchLater}`,
     toMenu: true,
     toHomePage: false,
     icon: BookmarkBorderIcon,

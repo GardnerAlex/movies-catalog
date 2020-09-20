@@ -1,2 +1,2 @@
-export { siteNav } from './navigationConfig';
-export { stylesConfig } from './stylesConfig';
+export { siteNav, personalStorages } from './navigationConfig';
+export { stylesConfig, iconButtonStyles, buttonColorPrimary, buttonColorSecondary, tooltipTexts } from './stylesConfig';

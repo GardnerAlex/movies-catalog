@@ -4,13 +4,13 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import { DrawerMenu } from '../DrawerMenu';
+import { stylesConfig } from '../../config';
 
-const drawerWidth = 220;
-const breakPoint = 'md';
+const { drawerWidth, drawerBreakPoint } = stylesConfig;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    [theme.breakpoints.up(breakPoint)]: {
+    [theme.breakpoints.up(drawerBreakPoint)]: {
       width: drawerWidth,
       flexShrink: 0
     }
