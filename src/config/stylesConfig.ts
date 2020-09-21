@@ -1,4 +1,4 @@
-import { personalStorages } from './navigationConfig';
+import { personalStorages } from './baseConfig';
 
 type stylesConfigTypes = {
   drawerWidth: number;

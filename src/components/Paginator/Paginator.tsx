@@ -4,7 +4,7 @@ import { Pagination } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import { IMovieApiResponse } from '../../interfaces';
+import { IApiResponse } from '../../interfaces';
 
 const queryString = require('query-string');
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Paginator = (props: {moviesData: IMovieApiResponse}) => {
+export const Paginator = (props: {moviesData: IApiResponse}) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));

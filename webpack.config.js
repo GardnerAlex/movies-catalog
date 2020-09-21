@@ -4,12 +4,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 const distFolder = 'build';
 
-// development webpack configuration.
 module.exports = {
   entry: { main: './src/index.jsx' },
   module: {
@@ -75,6 +75,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: devMode ? '[name].css' : '[name].[hash].css',
       chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
+    }),
+    new Dotenv({
+      path: './.env.development'
     })
   ],
   devServer: {

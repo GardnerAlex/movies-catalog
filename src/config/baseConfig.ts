@@ -19,3 +19,5 @@ export const personalStorages: personalStorageType = {
   favorites: 'favorites',
   watchLater: 'watchlater'
 };
+
+export const itemsPerPage = 3;

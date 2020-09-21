@@ -34,11 +34,6 @@ export interface IlocalApiRequest {
     genreName?: string;
 }
 
-// export interface IAddToDbRequest {
-//     movieDataToAdd: ImoviesData;
-//     queryType: PersonalStorages;
-// }
-
 export interface IApiRespResults {
     results: Array<ImoviesData>
 }
@@ -49,9 +44,34 @@ export interface IApiResponse {
     total_results?: number;
 }
 
-// useState<IconButtonProps>({ color: favoritesState.color, text: favoritesState.text }); // 'primary' means Not in Favorites
-
 export interface IconsInfo {
     color: IconButtonProps;
     text: string
+}
+
+export interface IMatchInterface {
+    location:
+      {
+          search: any;
+          pathname: string;
+      };
+    match:
+      { params:
+            {
+                genreName: string;
+            };
+      };
+    history: {
+        location: string
+    }
+}
+
+export interface IApiUrlInterface {
+    [params: string] : string;
+    queryType?: string;
+    search: string;
+    popular: string;
+    trending: string;
+    nowplaying: string;
+    genres: string;
 }

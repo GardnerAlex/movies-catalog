@@ -1,0 +1,1 @@
+export { getPageNum } from './utils';
