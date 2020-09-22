@@ -1,4 +1,5 @@
 #Movies DB React based project
+
 For now it is just tes project for the Leo Vegas company. But I have intention to made it real.
 
 Project was written in TypeScript.
@@ -33,4 +34,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 Lints TypeScript files, you can see output in the console
 
 ##Demo
+
 Demo app is deployed on [Heroku](https://leo-vegas-test-app.herokuapp.com/).
