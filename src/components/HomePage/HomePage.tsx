@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { ReactElement } from 'react';
 import { routes } from '../../routes';
+import { siteNav } from '../../config';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -111,11 +112,11 @@ export const HomePage = () => {
               Simple movies catalog, where you can discover new and trending movies, search movies by different conditions.
               There are also
               {' '}
-              <Link to="/favorites">Favorites</Link>
+              <Link to={siteNav.favorites}>Favorites</Link>
               {' '}
               and
               {' '}
-              <Link to="/watchLater">Watch later</Link>
+              <Link to={siteNav.watchLater}>Watch later</Link>
               {' '}
               functionality
             </Typography>
