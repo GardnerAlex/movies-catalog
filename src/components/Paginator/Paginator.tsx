@@ -4,7 +4,8 @@ import { Pagination } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import { IApiResponse } from '../../interfaces';
+import { IMovieApiResponse } from '../../interfaces';
+import { getPageNum } from '../../utils';
 
 const queryString = require('query-string');
 
@@ -19,35 +20,28 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Paginator = (props: {moviesData: IApiResponse}) => {
+export const Paginator = (props: {moviesData: IMovieApiResponse}) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { moviesData } = props;
   const history = useHistory();
-  const numCheck = new RegExp('^[0-9]+$');
 
-  const handlePageChange = (event: any, value: number) => {
+  const handlePageChange = (event: React.ChangeEvent<{}>, page: number) => {
     const query = queryString.parse(history.location.search);
-    query.page = value;
+    query.page = page;
     history.push(`${history.location.pathname}?${queryString.stringify(query)}`);
   };
 
-  let pageNum: number = 1;
-  const pageNumParsed = queryString.parse(history.location.search).page;
-  if (numCheck.test(pageNumParsed) === true) {
-    // todo define for what req types pagination is allowed
-    pageNum = Number.parseInt(pageNumParsed, 10);
-  }
-
+  const pageNum: number = getPageNum(history);
   let pagination = null;
 
-  if ('total_pages' in moviesData && moviesData.total_pages !== undefined && moviesData.total_pages > 0) {
+  if (moviesData && moviesData.data && 'total_pages' in moviesData.data && moviesData.data.total_pages !== undefined && moviesData.data.total_pages > 0) {
     pagination = (
       <Grid container justify="center" spacing={2}>
         <Grid className={classes.paper} item>
           <Pagination
-            count={moviesData.total_pages}
+            count={moviesData.data.total_pages}
             size={isMobile ? 'small' : 'large'}
             page={pageNum}
             color="primary"

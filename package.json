@@ -87,7 +87,6 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "compile": "tsc -w --jsx react",
     "start": "npx webpack-dev-server --mode development --content-base=build --history-api-fallback",
     "build": "NODE_ENV=production webpack -p",
     "lint:ts": "npx eslint --ext ts,tsx ./src --fix"

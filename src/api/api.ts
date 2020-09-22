@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { IApiResponse, IApiRespResults, IApiUrlInterface, IlocalApiRequest, ImoviesData } from '../interfaces';
+import {
+  IApiRespResults,
+  IResultsFromDb,
+  IApiUrlInterface,
+  IlocalApiRequest,
+  IMovieApiResponse,
+  ImoviesData
+} from '../interfaces';
 import { genresFromApi } from './apiDefaults';
 import { personalStorages, itemsPerPage } from '../config';
 
@@ -32,7 +39,7 @@ const queryUrl = (params: IlocalApiRequest): string => {
   return urlFormatter[params.queryType];
 };
 
-export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiResponse | ImoviesData> => {
+export const queryMoviesApi = (inputParams: IlocalApiRequest):Promise<IApiRespResults | ImoviesData> => {
   const url = queryUrl(inputParams);
   return axios(url)
     .then(response => response);
@@ -44,12 +51,12 @@ export const initLocalStorage = (queryType: string): void => {
   }
 };
 
-export const queryLocalStorage = (queryType: string): IApiRespResults => {
+export const queryLocalStorage = (queryType: string): IResultsFromDb => {
   initLocalStorage(queryType);
-  return { results: JSON.parse(localStorage.getItem(queryType)) };
+  return { data: { results: JSON.parse(localStorage.getItem(queryType)) } };
 };
 
-export const addToLocalStorage = (inputParams: IlocalApiRequest): IApiRespResults => {
+export const addToLocalStorage = (inputParams: IlocalApiRequest): IMovieApiResponse => {
   initLocalStorage(inputParams.queryType);
   const tmpLocalStorage: Array<ImoviesData> = JSON.parse(localStorage.getItem(inputParams.queryType));
   if (tmpLocalStorage.findIndex(item => item.id === inputParams.movieDataToAdd.id) === -1) {
@@ -59,7 +66,7 @@ export const addToLocalStorage = (inputParams: IlocalApiRequest): IApiRespResult
   return queryLocalStorage(inputParams.queryType);
 };
 
-export const deleteFromLocalStorage = (inputParams: IlocalApiRequest): IApiRespResults => {
+export const deleteFromLocalStorage = (inputParams: IlocalApiRequest): IMovieApiResponse => {
   initLocalStorage(inputParams.queryType);
   const tmpLocalStorage: Array<ImoviesData> = JSON.parse(localStorage.getItem(inputParams.queryType));
   const movieIndexInStorage = tmpLocalStorage.findIndex(item => item.id === inputParams.movieDataToAdd.id);
@@ -70,19 +77,27 @@ export const deleteFromLocalStorage = (inputParams: IlocalApiRequest): IApiRespR
   return queryLocalStorage(inputParams.queryType);
 };
 
-export const getPersonalMoviesInfo = (inputParams: IlocalApiRequest): Promise<IApiResponse> => {
+export const getPersonalMoviesInfo = (inputParams: IlocalApiRequest): Promise<IApiRespResults> => {
   const dataFromDb = queryLocalStorage(inputParams.queryType);
-  const dataLength = dataFromDb.results.length;
-  const res:IApiResponse = {
-    data: { results: dataFromDb.results.slice(inputParams.pageId * itemsPerPage, itemsPerPage) },
-    page: inputParams.pageId,
-    total_pages: Math.ceil(dataLength / itemsPerPage),
-    total_results: dataLength
+  const dataLength = dataFromDb.data.results.length;
+  let resFromDb;
+  if (inputParams.pageId === undefined) {
+    resFromDb = dataFromDb.data.results;
+  } else {
+    resFromDb = dataFromDb.data.results.slice((inputParams.pageId - 1) * itemsPerPage, (inputParams.pageId - 1) * itemsPerPage + itemsPerPage);
+  }
+  const res: IApiRespResults = {
+    data: {
+      results: resFromDb,
+      page: inputParams.pageId,
+      total_pages: Math.ceil(dataLength / itemsPerPage),
+      total_results: dataLength
+    }
   };
-  return new Promise<IApiResponse>(resolve => resolve(res));
+  return new Promise<IApiRespResults>(resolve => resolve(res));
 };
 
-export const processApiRequest = (inputParams: IlocalApiRequest) => {
+export const processApiRequest = (inputParams: IlocalApiRequest): Promise<IApiRespResults | ImoviesData> => {
   switch (inputParams.queryType) {
     case personalStorages.favorites:
     case personalStorages.watchLater:

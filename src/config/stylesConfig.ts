@@ -9,7 +9,7 @@ export const stylesConfig: stylesConfigTypes = {
   drawerBreakPoint: 'md'
 };
 
-export type iconButtonStyles = 'primary' | 'secondary';
+type iconButtonStyles = 'primary' | 'secondary';
 
 export const buttonColorPrimary: iconButtonStyles = 'primary';
 export const buttonColorSecondary: iconButtonStyles = 'secondary';

@@ -2,13 +2,13 @@ import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
 import React, { useState } from 'react';
 import { IMovieApiResponse, ImoviesData } from '../../interfaces';
 import { addToLocalStorage, deleteFromLocalStorage } from '../../api';
-import { iconButtonStyles, buttonColorSecondary, buttonColorPrimary, tooltipTexts } from '../../config';
+import { buttonColorSecondary, buttonColorPrimary, tooltipTexts } from '../../config';
 
-export const PersonalizedListPlaceHolder = (props: {icon:any, personalStorageType: string, movie: ImoviesData, personalStorageData: IMovieApiResponse}) => {
+export const PersonalizedListPlaceHolder = (props: {icon: React.FC, personalStorageType: string, movie: ImoviesData, personalStorageData: IMovieApiResponse}) => {
   const { personalStorageType, movie, personalStorageData, icon } = props;
   const Icon = icon;
-  const getPersonalizedState = (id: number): iconButtonStyles => {
-    if (personalStorageData.results.findIndex(item => item.id === id) !== -1) {
+  const getPersonalizedState = (id: number): typeof buttonColorSecondary | typeof buttonColorPrimary => {
+    if (personalStorageData.data.results.findIndex((item) => item.id === id) !== -1) {
       return buttonColorSecondary;
     }
     return buttonColorPrimary;

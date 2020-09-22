@@ -1,4 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#Movies DB React based project
+For now it is just tes project for the Leo Vegas company. But I have intention to made it real.
+
+Project was written in TypeScript.
+
 
 ## Available Scripts
 
@@ -11,11 +15,8 @@ Open [http://localhost:9090](http://localhost:9090) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
+You need to have .env file with API_KEY='your_api_key' param defined or set it in the environment
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -26,3 +27,10 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `lint:ts`
+
+Lints TypeScript files, you can see output in the console
+
+##Demo
+Demo app is deployed on [Heroku](https://leo-vegas-test-app.herokuapp.com/).

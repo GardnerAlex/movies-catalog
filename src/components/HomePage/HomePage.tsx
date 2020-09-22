@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { ReactElement } from 'react';
 import { routes } from '../../routes';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 export const HomePage = () => {
   const classes = useStyles();
 
-  const contentMain: any = [];
+  const contentMain: ReactElement[] = [];
   routes.forEach((item) => {
     // console.log('item path', item.path);
     if (item.toHomePage === true && item.path !== '/') {

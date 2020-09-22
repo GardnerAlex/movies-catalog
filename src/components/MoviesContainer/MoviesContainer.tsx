@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress, Container, Divider } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Paginator } from '../Paginator';
-import { IApiResponse, IMatchInterface, IMovieApiResponse } from '../../interfaces';
-import { processApiRequest, queryLocalStorage } from '../../api';
-import { MovieDetails } from '../../pages/MovieDetails';
-import { Movie } from '../../pages/Movie';
+import { IMatchInterface, IMovieApiResponse } from '../../interfaces';
+import { processApiRequest } from '../../api';
 import { personalStorages } from '../../config';
 import { contentHeader } from '../ContentHeader';
+import { ContentToDisplay } from '../ContentToDisplay';
 import { getPageNum } from '../../utils';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,12 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       flexWrap: 'wrap'
-    },
-    paper: {
-      marginTop: theme.spacing(2),
-      padding: theme.spacing(2),
-      textAlign: 'left',
-      color: theme.palette.text.secondary
     },
     progress: {
       margin: theme.spacing(4)
@@ -36,28 +28,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const MoviesContainer = (match: IMatchInterface) => {
   const classes = useStyles();
-  const initMoviesData: IApiResponse = { page: 0, data: { results: [] }, total_pages: 0, total_results: 0 };
-  const [moviesData, setMoviesData] = useState<IApiResponse>(initMoviesData);
-  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(queryLocalStorage(personalStorages.favorites));
-  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(queryLocalStorage(personalStorages.watchLater));
+  const [moviesData, setMoviesData] = useState<IMovieApiResponse>(null);
+  const [favoritesData, setFavoritesData] = useState<IMovieApiResponse>(null);
+  const [watchLaterData, setWatchLaterData] = useState<IMovieApiResponse>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>(null);
   const location = match.location.pathname.split('/')[1];
   const contentTitle = contentHeader(match);
-  const pageNum = getPageNum(match);
+  const pageNum = getPageNum(match.history);
 
   useEffect(() => {
     setLoading(true);
-    setMoviesData(initMoviesData);
-    setFavoritesData(queryLocalStorage(personalStorages.favorites));
-    setWatchLaterData(queryLocalStorage(personalStorages.watchLater));
-    processApiRequest({ queryType: location, pageId: pageNum, ...match.match.params })
-      .then(res => {
-        if ('data' in res) {
-          setMoviesData(res);
-        }
-        setLoading(false);
-      })
+    const p1 = processApiRequest({ queryType: personalStorages.favorites });
+    const p2 = processApiRequest({ queryType: personalStorages.watchLater });
+    const p3 = processApiRequest({ queryType: location, pageId: pageNum, ...match.match.params });
+    Promise.all([p1, p2, p3]).then((value) => {
+      setFavoritesData({ data: value[0].data });
+      setWatchLaterData({ data: value[1].data });
+      setMoviesData({ data: value[2].data });
+      setLoading(false);
+      window.scrollTo(0, 0);
+    })
       .catch((err) => {
         setErrorMessage(err.toString());
         setLoading(false);
@@ -67,48 +58,6 @@ export const MoviesContainer = (match: IMatchInterface) => {
     };
   }, [match.history.location]);
 
-  const noMovies = (
-    <Container maxWidth="lg">
-      <Typography variant="h4">
-        No data to show here ... ;((
-      </Typography>
-    </Container>
-  );
-
-  let contentToDisplay;
-  // todo replace with constants
-  if (moviesData) {
-    if (location === 'moviedetails') {
-      if ('id' in moviesData.data) {
-        contentToDisplay = (
-          <MovieDetails
-            movie={moviesData.data}
-            favoritesData={favoritesData}
-            watchLaterData={watchLaterData}
-          />
-        );
-      }
-    }
-    if ('results' in moviesData.data && moviesData.data.results.length > 0) {
-      contentToDisplay = (
-        <Grid container justify="center" spacing={2}>
-          {moviesData.data.results.map((movie) => (
-            <Grid className={classes.paper} key={`${movie.poster_path}${movie.id}${movie.title}`} item>
-              <Movie
-                movie={movie}
-                favoritesData={favoritesData}
-                watchLaterData={watchLaterData}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      );
-    }
-  } else {
-    contentToDisplay = noMovies;
-  }
-
-  // @ts-ignore
   return (
     <>
       <Container className={classes.title}>
@@ -119,7 +68,7 @@ export const MoviesContainer = (match: IMatchInterface) => {
       </Container>
       <Divider className={classes.title} />
       {errorMessage && <span>{errorMessage}</span>}
-      {!loading && contentToDisplay}
+      {!loading && <ContentToDisplay moviesData={moviesData} favoritesData={favoritesData} match={match} watchLaterData={watchLaterData} />}
       {!loading && <Paginator moviesData={moviesData} />}
     </>
   );

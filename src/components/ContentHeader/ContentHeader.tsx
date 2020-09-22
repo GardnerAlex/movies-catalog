@@ -1,6 +1,7 @@
 import { siteNav } from '../../config';
+import { IMatchInterface } from '../../interfaces';
 
-export const contentHeader = (match: { location: { search: any; pathname: string; }; match: { params: { genreName: string; }; }; }) => {
+export const contentHeader = (match: IMatchInterface) => {
   const location = match.location.pathname.split('/')[1];
   switch (location) {
     case siteNav.genres:

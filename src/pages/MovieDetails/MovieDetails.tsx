@@ -40,9 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     textBox: {
       margin: '5px 15px'
     },
-    rating: {
-      // padding: '12px 15px'
-    },
     title: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(8),
@@ -62,7 +59,6 @@ export const MovieDetails = (props: {movie: ImoviesData, watchLaterData: IMovieA
       </Typography>
       <Grid container justify="center" spacing={2}>
         <Card className={classes.root}>
-          {/* <Link to={`/moviedetails/${movie.id}_${movie.title}`} key={movie.id}> */}
           <Link to="/test">
             <CardMedia
               className={classes.media}
@@ -72,7 +68,7 @@ export const MovieDetails = (props: {movie: ImoviesData, watchLaterData: IMovieA
           </Link>
           <CardActions className={classes.actions}>
             <Tooltip title="User rating">
-              <div aria-label="user rating" className={classes.rating}>
+              <div aria-label="user rating">
                 <Rating size="small" name="half-rating-read" precision={0.1} readOnly value={movie.vote_average / 2} />
               </div>
             </Tooltip>
