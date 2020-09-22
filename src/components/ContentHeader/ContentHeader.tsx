@@ -18,6 +18,8 @@ export const contentHeader = (match: IMatchInterface) => {
       return 'Hot and gaining popularity movies this week:';
     case siteNav.popular:
       return 'Popular movies:';
+    case siteNav.search:
+      return 'Search results:';
     default:
       return 'Main page';
   }
